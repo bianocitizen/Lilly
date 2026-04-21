@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lilly Direct PDP — Delivery Explorer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --lilly-red:#C8102E;--lilly-dark:#1A1A1A;--lilly-mid:#4A4A4A;
+  --lilly-muted:#8A8A8A;--lilly-line:#E2E2E2;--lilly-bg:#FAFAF8;
+  --lilly-green:#1B6E3C;--lilly-amber:#9B5800;--lilly-blue:#1A4E8C;
+  --lilly-green-bg:#EAF4EE;--lilly-amber-bg:#FFF4E0;--lilly-blue-bg:#EBF0FA;
+  --lilly-green-bd:#B2D9C1;--lilly-amber-bd:#F0D49A;--lilly-blue-bd:#B8C8E8;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--lilly-bg);color:var(--lilly-dark);font-size:14px;line-height:1.5;padding:2rem 1rem 4rem}
+.phone{width:375px;margin:0 auto;background:#fff;border:1px solid var(--lilly-line);border-radius:20px;overflow:hidden;position:relative;box-shadow:0 4px 24px rgba(0,0,0,0.06)}
+.status-bar{height:44px;background:#fff;display:flex;align-items:flex-end;justify-content:space-between;padding:0 24px 8px;font-size:12px;font-weight:500}
+.nav-bar{display:flex;align-items:center;justify-content:space-between;padding:8px 16px 12px;border-bottom:0.5px solid var(--lilly-line)}
+.nav-back{width:36px;height:36px;border-radius:50%;border:0.5px solid var(--lilly-line);display:flex;align-items:center;justify-content:center;cursor:pointer;background:#fff}
+.nav-actions{display:flex;gap:8px}
+.nav-icon{width:36px;height:36px;border-radius:50%;border:0.5px solid var(--lilly-line);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;background:#fff}
+.hero{padding:20px 20px 16px;border-bottom:0.5px solid var(--lilly-line)}
+.delivery-pill{display:inline-flex;align-items:center;gap:5px;background:var(--lilly-green-bg);border:0.5px solid var(--lilly-green-bd);border-radius:20px;padding:3px 10px 3px 8px;font-size:11px;font-weight:500;color:var(--lilly-green);cursor:pointer}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--lilly-green);flex-shrink:0}
+.section{padding:16px 20px;border-bottom:0.5px solid var(--lilly-line)}
+.section-title{font-size:11px;letter-spacing:0.07em;text-transform:uppercase;color:var(--lilly-muted);margin-bottom:10px;font-weight:500}
+.dose-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:4px}
+.dose-btn{height:34px;border-radius:6px;border:0.5px solid var(--lilly-line);background:#fff;font-size:13px;font-weight:400;cursor:pointer;transition:all 0.15s;color:var(--lilly-dark);display:flex;align-items:center;justify-content:center;position:relative}
+.dose-btn.active{border-color:var(--lilly-dark);border-width:1.5px;background:#fff;font-weight:500}
+.dose-btn.has-fast::after{content:'';position:absolute;top:3px;right:3px;width:4px;height:4px;border-radius:50%;background:var(--lilly-green)}
+.device-row{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border:0.5px solid var(--lilly-line);border-radius:8px;cursor:pointer;transition:all 0.15s;margin-bottom:6px;background:#fff}
+.device-row.active{border-color:var(--lilly-dark);border-width:1.5px;background:#FAFAFA}
+.device-row:last-child{margin-bottom:0}
+.device-name{font-size:13px;font-weight:500}
+.device-sub{font-size:11px;color:var(--lilly-muted);margin-top:1px}
+.device-price{font-size:12px;color:var(--lilly-mid);text-align:right}
+.device-radio{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--lilly-line);margin-left:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.device-radio.checked{border-color:var(--lilly-dark);background:var(--lilly-dark)}
+.device-radio.checked::after{content:'';width:5px;height:5px;border-radius:50%;background:#fff}
+.fulfillment-tabs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-bottom:12px}
+.ftab{padding:7px 4px;border-radius:8px;border:0.5px solid var(--lilly-line);text-align:center;cursor:pointer;transition:all 0.15s;background:#fff}
+.ftab.active.green{border-color:var(--lilly-green-bd);background:var(--lilly-green-bg)}
+.ftab.active.amber{border-color:var(--lilly-amber-bd);background:var(--lilly-amber-bg)}
+.ftab.active.blue{border-color:var(--lilly-blue-bd);background:var(--lilly-blue-bg)}
+.ftab-icon{font-size:14px;margin-bottom:2px}
+.ftab-label{font-size:10px;font-weight:500;line-height:1.2}
+.ftab-time{font-size:9px;color:var(--lilly-muted);margin-top:1px}
+.ftab.active.green .ftab-label{color:var(--lilly-green)}
+.ftab.active.amber .ftab-label{color:var(--lilly-amber)}
+.ftab.active.blue .ftab-label{color:var(--lilly-blue)}
+.fulfillment-switch{display:flex;border:0.5px solid var(--lilly-line);border-radius:8px;overflow:hidden;margin-bottom:12px}
+.fswitch{flex:1;padding:6px;text-align:center;font-size:11px;cursor:pointer;transition:background 0.15s;color:var(--lilly-muted)}
+.fswitch.active{background:var(--lilly-dark);color:#fff;font-weight:500}
+.partner-card{border:0.5px solid var(--lilly-line);border-radius:10px;padding:12px;margin-bottom:8px;background:#fff;cursor:pointer;transition:all 0.15s;position:relative}
+.partner-card:hover{border-color:#bbb}
+.partner-card.selected{border-color:var(--lilly-dark);border-width:1.5px}
+.partner-card:last-child{margin-bottom:0}
+.partner-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px}
+.partner-name{font-size:13px;font-weight:500}
+.partner-address{font-size:11px;color:var(--lilly-muted);margin-top:1px}
+.partner-badge{display:inline-flex;align-items:center;gap:4px;border-radius:20px;padding:2px 8px;font-size:10px;font-weight:500}
+.badge-green{background:var(--lilly-green-bg);color:var(--lilly-green);border:0.5px solid var(--lilly-green-bd)}
+.badge-amber{background:var(--lilly-amber-bg);color:var(--lilly-amber);border:0.5px solid var(--lilly-amber-bd)}
+.badge-blue{background:var(--lilly-blue-bg);color:var(--lilly-blue);border:0.5px solid var(--lilly-blue-bd)}
+.partner-footer{display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding-top:8px;border-top:0.5px solid var(--lilly-line)}
+.partner-avail{font-size:11px;font-weight:500}
+.partner-dist{font-size:11px;color:var(--lilly-muted)}
+.urgency-bar{border-radius:8px;padding:9px 12px;font-size:11px;margin-bottom:10px;display:flex;align-items:center;gap:7px}
+.urgency-bar.green{background:var(--lilly-green-bg);border:0.5px solid var(--lilly-green-bd);color:var(--lilly-green)}
+.urgency-bar.amber{background:var(--lilly-amber-bg);border:0.5px solid var(--lilly-amber-bd);color:var(--lilly-amber)}
+.urgency-bar.blue{background:var(--lilly-blue-bg);border:0.5px solid var(--lilly-blue-bd);color:var(--lilly-blue)}
+.pay-options{display:flex;flex-direction:column;gap:6px;margin-bottom:8px}
+.pay-row{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border:0.5px solid var(--lilly-line);border-radius:8px;cursor:pointer;background:#fff;transition:all 0.15s}
+.pay-row.active{border-color:var(--lilly-dark);border-width:1.5px}
+.pay-name{font-size:13px;font-weight:500}
+.pay-detail{font-size:11px;color:var(--lilly-muted);margin-top:1px}
+.rx-note{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--lilly-muted);margin-top:8px}
+.cta-area{padding:16px 20px 20px;background:#fff;border-top:0.5px solid var(--lilly-line)}
+.cta-btn{width:100%;padding:14px;background:var(--lilly-dark);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:opacity 0.15s;display:flex;align-items:center;justify-content:center;gap:8px}
+.cta-btn:hover{opacity:0.88}
+.cta-sub{text-align:center;font-size:11px;color:var(--lilly-muted);margin-top:6px}
+.sku-change-hint{font-size:10px;color:var(--lilly-green);font-weight:500;display:flex;align-items:center;gap:4px;margin-top:8px;cursor:pointer}
+.hidden{display:none!important}
+.fade-in{animation:fadeIn 0.2s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.location-chip{display:inline-flex;align-items:center;gap:5px;background:#F2F2F0;border:0.5px solid var(--lilly-line);border-radius:20px;padding:3px 10px 3px 8px;font-size:11px;color:var(--lilly-mid);cursor:pointer;margin-bottom:12px}
+</style>
+</head>
+<body>
+
+<div style="padding:1rem 0 2rem;max-width:420px;margin:0 auto">
+<div class="phone">
+
+<div class="status-bar">
+  <span>9:41</span>
+  <span>&#9679;&#9679;&#9679;&#9679; LTE</span>
+</div>
+
+<div class="nav-bar">
+  <div class="nav-back">&#8592;</div>
+  <div style="font-size:11px;color:var(--lilly-muted);letter-spacing:0.04em;text-transform:uppercase">Lilly Direct</div>
+  <div class="nav-actions">
+    <div class="nav-icon" style="font-size:12px">&#9733;</div>
+    <div class="nav-icon" style="font-size:12px">&#9783;</div>
+  </div>
+</div>
+
+<div style="background:linear-gradient(180deg,#F5F0E8 0%,#fff 100%);padding:24px 20px 20px;text-align:center;border-bottom:0.5px solid var(--lilly-line)">
+  <div style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--lilly-muted);margin-bottom:8px">Lilly</div>
+  <div style="font-family:'Libre Baskerville',serif;font-size:32px;color:var(--lilly-dark);line-height:1">Zepbound<sup style="font-size:14px;top:-10px;position:relative">®</sup></div>
+  <div style="font-size:12px;color:var(--lilly-muted);margin-top:4px;margin-bottom:16px">(tirzepatide)</div>
+  <div style="width:140px;height:140px;margin:0 auto 16px;border-radius:12px;background:linear-gradient(135deg,#F0EBE0,#E8E0D0);display:flex;align-items:center;justify-content:center;font-size:48px">💉</div>
+  <div style="font-size:11px;color:var(--lilly-muted)">Starting at</div>
+  <div id="heroPrice" style="font-size:28px;font-weight:500;color:var(--lilly-dark)">$299<span style="font-size:14px;font-weight:400;color:var(--lilly-muted)">/mo</span></div>
+  <div style="margin-top:10px">
+    <span id="heroPill" class="delivery-pill"><span class="dot"></span><span id="heroPillText">Ready in 25 min · CVS nearby</span></span>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Dose (mg/week)</div>
+  <div class="dose-grid" id="doseGrid">
+    <button class="dose-btn has-fast" data-dose="2.5" onclick="selectDose(this)">2.5</button>
+    <button class="dose-btn has-fast active" data-dose="5" onclick="selectDose(this)">5</button>
+    <button class="dose-btn has-fast" data-dose="7.5" onclick="selectDose(this)">7.5</button>
+    <button class="dose-btn" data-dose="10" onclick="selectDose(this)">10</button>
+    <button class="dose-btn" data-dose="12.5" onclick="selectDose(this)">12.5</button>
+    <button class="dose-btn" data-dose="15" onclick="selectDose(this)">15</button>
+  </div>
+  <div class="sku-change-hint" id="fastHint">&#9679; 2.5–7.5 mg available for same-day pickup nearby</div>
+</div>
+
+<div class="section">
+  <div class="section-title">Device type</div>
+  <div class="device-list">
+    <div class="device-row active" onclick="selectDevice(this,'kwikpen','$299')" data-device="kwikpen">
+      <div>
+        <div class="device-name">KwikPen</div>
+        <div class="device-sub">Single-patient · 4 pens/box</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="text-align:right"><div class="device-price" style="font-weight:500;font-size:13px">$299<span style="font-size:10px;font-weight:400">/mo</span></div><div class="device-sub">Ins. or self-pay</div></div>
+        <div class="device-radio checked" id="radio-kwikpen"></div>
+      </div>
+    </div>
+    <div class="device-row" onclick="selectDevice(this,'vial','$299')" data-device="vial">
+      <div>
+        <div class="device-name">Vial</div>
+        <div class="device-sub">Single-dose · 4 vials/box</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="text-align:right"><div class="device-price" style="font-weight:500;font-size:13px">$299<span style="font-size:10px;font-weight:400">/mo</span></div><div class="device-sub">Ins. or self-pay</div></div>
+        <div class="device-radio" id="radio-vial"></div>
+      </div>
+    </div>
+    <div class="device-row" onclick="selectDevice(this,'pen','$399')" data-device="pen">
+      <div>
+        <div class="device-name">Pre-filled Pen</div>
+        <div class="device-sub">Single-dose · 4 pens/box</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="text-align:right"><div class="device-price" style="font-weight:500;font-size:13px">$399<span style="font-size:10px;font-weight:400">/mo</span></div><div class="device-sub">Ins. or self-pay</div></div>
+        <div class="device-radio" id="radio-pen"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section" id="fulfillmentSection">
+  <div class="section-title">How do you need it?</div>
+  <div style="margin-bottom:10px">
+    <span class="location-chip">&#128205; New York, Manhattan &nbsp;&#10005;</span>
+  </div>
+  <div class="fulfillment-tabs">
+    <div class="ftab active green" onclick="selectFTab(this,'green')" data-ftab="express">
+      <div class="ftab-icon" style="color:var(--lilly-green)">&#9889;</div>
+      <div class="ftab-label">Now</div>
+      <div class="ftab-time">~25 min</div>
+    </div>
+    <div class="ftab" onclick="selectFTab(this,'amber')" data-ftab="tomorrow">
+      <div class="ftab-icon">&#9685;</div>
+      <div class="ftab-label">Tomorrow</div>
+      <div class="ftab-time">Pickup or delivery</div>
+    </div>
+    <div class="ftab" onclick="selectFTab(this,'blue')" data-ftab="scheduled">
+      <div class="ftab-icon">&#128197;</div>
+      <div class="ftab-label">Schedule</div>
+      <div class="ftab-time">Choose a date</div>
+    </div>
+  </div>
+  <div class="fulfillment-switch" id="fulfillSwitch">
+    <div class="fswitch active" onclick="selectMode('pickup')" id="modePickup">In-store pickup</div>
+    <div class="fswitch" onclick="selectMode('delivery')" id="modeDelivery">Home delivery</div>
+  </div>
+
+  <div id="expressPickupPanel" class="fade-in">
+    <div class="urgency-bar green"><span style="font-size:14px">&#9889;</span><span>3 locations with stock right now · prescription required</span></div>
+    <div class="partner-card selected" onclick="selectPartner(this)">
+      <div class="partner-top"><div><div class="partner-name">CVS Pharmacy</div><div class="partner-address">401 Park Ave S · 0.8 mi</div></div><span class="partner-badge badge-green"><span>&#9679;</span> In stock</span></div>
+      <div class="partner-footer"><span class="partner-avail" style="color:var(--lilly-green)">Ready in ~25 min</span><span class="partner-dist">Open until 10 PM</span></div>
+    </div>
+    <div class="partner-card" onclick="selectPartner(this)">
+      <div class="partner-top"><div><div class="partner-name">Duane Reade</div><div class="partner-address">100 W 57th St · 1.2 mi</div></div><span class="partner-badge badge-green"><span>&#9679;</span> In stock</span></div>
+      <div class="partner-footer"><span class="partner-avail" style="color:var(--lilly-green)">Ready in ~30 min</span><span class="partner-dist">Open until 9 PM</span></div>
+    </div>
+    <div class="partner-card" onclick="selectPartner(this)">
+      <div class="partner-top"><div><div class="partner-name">Walmart Supercenter</div><div class="partner-address">400 Park Plaza Dr, Secaucus · 4 mi</div></div><span class="partner-badge badge-green"><span>&#9679;</span> In stock</span></div>
+      <div class="partner-footer"><span class="partner-avail" style="color:var(--lilly-green)">Ready today · drive</span><span class="partner-dist">Open until 11 PM</span></div>
+    </div>
+  </div>
+
+  <div id="expressDeliveryPanel" class="hidden fade-in">
+    <div class="urgency-bar green"><span style="font-size:14px">&#128666;</span><span>Express home delivery available from 2 carriers</span></div>
+    <div class="partner-card selected" onclick="selectPartner(this)">
+      <div class="partner-top"><div><div class="partner-name">Express (today)</div><div class="partner-address" style="font-size:12px">via CVS partner network</div></div><span class="partner-badge badge-green">Est. by 6 PM</span></div>
+      <div class="partner-footer"><span class="partner-avail" style="color:var(--lilly-green);font-size:13px;font-weight:500">$349/mo delivered</span><span class="partner-dist">$50 delivery fee</span></div>
+    </div>
+    <div class="partner-card" onclick="selectPartner(this)">
+      <div class="partner-top"><div><div class="partner-name">Express (today)</div><div class="partner-address" style="font-size:12px">via Duane Reade</div></div><span class="partner-badge badge-green">Est. by 8 PM</span></div>
+      <div class="partner-footer"><span class="partner-avail" style="color:var(--lilly-green);font-size:13px;font-weight:500">$349/mo delivered</span><span class="partner-dist">$50 delivery fee</span></div>
+    </div>
+  </div>
+
+  <div id="tomorrowPickupPanel" class="hidden fade-in">
+    <div class="urgency-bar amber"><span>&#9685;</span><span>Ready for pickup tomorrow · more locations available</span></div>
+    <div class="partner-card selected" onclick="selectPartner(this)">
+      <div class="partner-top"><div><div class="partner-name">Walmart Supercenter</div><div class="partner-address">400 Park Plaza Dr, Secaucus NJ</div></div><span class="partner-badge badge-amber">Tomorrow</span></div>
+      <div class="partner-footer"><span class="partner-avail" style="color:var(--lilly-amber)">Available tomorrow</span><span class="partner-dist">In-store pickup</span></div>
+    </div>
+    <div class="partner-card" onclick="selectPartner(this)">
+      <div class="partner-top"><div><div class="partner-name">Duane Reade</div><div class="partner-address">100 W 57th St, New York</div></div><span class="partner-badge badge-amber">Tomorrow</span></div>
+      <div class="partner-footer"><span class="partner-avail" style="color:var(--lilly-amber)">Available tomorrow</span><span class="partner-dist">1.2 mi · In-store</span></div>
+    </div>
+  </div>
+
+  <div id="tomorrowDeliveryPanel" class="hidden fade-in">
+    <div class="urgency-bar amber"><span>&#128666;</span><span>Next-day home delivery from $299/mo</span></div>
+    <div class="partner-card selected" onclick="selectPartner(this)">
+      <div class="partner-top"><div><div class="partner-name">Standard delivery</div><div class="partner-address">Lilly Direct pharmacy network</div></div><span class="partner-badge badge-amber">Tomorrow</span></div>
+      <div class="partner-footer"><span class="partner-avail" style="color:var(--lilly-amber);font-size:13px;font-weight:500">$299/mo</span><span class="partner-dist">Free delivery</span></div>
+    </div>
+  </div>
+
+  <div id="scheduledPickupPanel" class="hidden fade-in">
+    <div class="urgency-bar blue"><span>&#128197;</span><span>Choose pickup date at your preferred pharmacy</span></div>
+    <div class="partner-card selected" onclick="selectPartner(this)">
+      <div class="partner-top"><div><div class="partner-name">Walmart Supercenter</div><div class="partner-address">400 Park Plaza Dr, Secaucus NJ</div></div><span class="partner-badge badge-blue">Mon Apr 6</span></div>
+      <div class="partner-footer"><span class="partner-avail" style="color:var(--lilly-blue)">Available Mon, Apr 6</span><span class="partner-dist">In-store pickup</span></div>
+    </div>
+    <div class="partner-card" onclick="selectPartner(this)">
+      <div class="partner-top"><div><div class="partner-name">Walmart Supercenter</div><div class="partner-address">77 Green Acres Rd, Valley Stream NY</div></div><span class="partner-badge badge-blue">Tue Apr 7</span></div>
+      <div class="partner-footer"><span class="partner-avail" style="color:var(--lilly-blue)">Available Tue, Apr 7</span><span class="partner-dist">In-store pickup</span></div>
+    </div>
+    <div class="partner-card" onclick="selectPartner(this)">
+      <div class="partner-top"><div><div class="partner-name">Walmart Supercenter</div><div class="partner-address">275 Main St, White Plains NY</div></div><span class="partner-badge badge-blue">Wed Apr 8</span></div>
+      <div class="partner-footer"><span class="partner-avail" style="color:var(--lilly-blue)">Available Wed, Apr 8</span><span class="partner-dist">In-store pickup</span></div>
+    </div>
+  </div>
+
+  <div id="scheduledDeliveryPanel" class="hidden fade-in">
+    <div class="urgency-bar blue"><span>&#128197;</span><span>Schedule recurring delivery — never miss a dose</span></div>
+    <div class="partner-card selected" onclick="selectPartner(this)">
+      <div class="partner-top"><div><div class="partner-name">Monthly subscription</div><div class="partner-address">Lilly Direct · auto-refill</div></div><span class="partner-badge badge-blue">Apr 7</span></div>
+      <div class="partner-footer"><span class="partner-avail" style="color:var(--lilly-blue);font-size:13px;font-weight:500">$299/mo</span><span class="partner-dist">Free delivery · cancel anytime</span></div>
+    </div>
+    <div style="font-size:11px;color:var(--lilly-muted);margin-top:8px;padding:8px 12px;background:#F5F5F3;border-radius:8px">
+      Earn 3% cashback with single annual payment &nbsp;·&nbsp; Auto-refill can be paused
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Payment</div>
+  <div class="pay-options">
+    <div class="pay-row active" onclick="selectPay(this)">
+      <div><div class="pay-name">Insurance</div><div class="pay-detail">Submit to your plan · as low as $25 copay</div></div>
+      <div class="device-radio checked" id="payrad1" style="flex-shrink:0"></div>
+    </div>
+    <div class="pay-row" onclick="selectPay(this)">
+      <div><div class="pay-name">Self-pay</div><div class="pay-detail" id="selfPayNote">Starting at $299/mo</div></div>
+      <div class="device-radio" id="payrad2" style="flex-shrink:0"></div>
+    </div>
+  </div>
+  <div class="rx-note">&#9632;&nbsp; Prescription required · Lilly connects you to a licensed provider</div>
+</div>
+
+<div class="cta-area">
+  <button class="cta-btn" id="ctaBtn">
+    <span id="ctaText">Reserve at CVS — Ready in 25 min</span>
+  </button>
+  <div class="cta-sub" id="ctaSub">Prescription verified at checkout · no upfront cost</div>
+</div>
+
+</div>
+</div>
+
+<script>
+var currentTab='express',currentMode='pickup',currentDose='5',currentDevice='kwikpen',selectedPartner=0;
+var ctaLabels={
+  'express-pickup-0':'Reserve at CVS — Ready in 25 min',
+  'express-pickup-1':'Reserve at Duane Reade — 30 min',
+  'express-pickup-2':'Reserve at Walmart — Today',
+  'express-delivery-0':'Order express delivery — Est. 6 PM',
+  'express-delivery-1':'Order express delivery — Est. 8 PM',
+  'tomorrow-pickup-0':'Reserve for tomorrow — Walmart NJ',
+  'tomorrow-pickup-1':'Reserve for tomorrow — Duane Reade',
+  'tomorrow-delivery-0':'Order next-day delivery',
+  'scheduled-pickup-0':'Schedule pickup — Mon Apr 6',
+  'scheduled-pickup-1':'Schedule pickup — Tue Apr 7',
+  'scheduled-pickup-2':'Schedule pickup — Wed Apr 8',
+  'scheduled-delivery-0':'Subscribe — starting Apr 7'
+};
+var pillData={
+  'express-pickup':'Ready in 25 min · CVS nearby',
+  'express-delivery':'Express delivery by 6 PM',
+  'tomorrow-pickup':'Pickup tomorrow · Walmart',
+  'tomorrow-delivery':'Next-day home delivery',
+  'scheduled-pickup':'Pickup Mon Apr 6',
+  'scheduled-delivery':'Auto-refill from Apr 7'
+};
+var pillColor={'express':'green','tomorrow':'amber','scheduled':'blue'};
+
+function showPanel(id){
+  document.querySelectorAll('[id$="Panel"]').forEach(function(p){p.classList.add('hidden')});
+  var el=document.getElementById(id);
+  if(el){el.classList.remove('hidden');el.classList.add('fade-in')}
+}
+function updateUI(){
+  var panelId=currentTab+(currentMode==='pickup'?'Pickup':'Delivery')+'Panel';
+  showPanel(panelId);
+  selectedPartner=0;
+  updateCTA();
+  updateHeroPill();
+}
+function updateCTA(){
+  var key=currentTab+'-'+currentMode+'-'+selectedPartner;
+  document.getElementById('ctaText').textContent=ctaLabels[key]||'Continue';
+}
+function updateHeroPill(){
+  var key=currentTab+'-'+currentMode;
+  var text=pillData[key]||'Available near you';
+  var color=pillColor[currentTab]||'green';
+  document.getElementById('heroPillText').textContent=text;
+  var pill=document.getElementById('heroPill');
+  var colorMap={green:['var(--lilly-green-bg)','var(--lilly-green-bd)','var(--lilly-green)'],amber:['var(--lilly-amber-bg)','var(--lilly-amber-bd)','var(--lilly-amber)'],blue:['var(--lilly-blue-bg)','var(--lilly-blue-bd)','var(--lilly-blue)']};
+  var c=colorMap[color];
+  pill.style.background=c[0];pill.style.border='0.5px solid '+c[1];pill.style.color=c[2];
+  pill.querySelector('.dot').style.background=c[2];
+}
+function selectFTab(el,color){
+  document.querySelectorAll('.ftab').forEach(function(t){t.classList.remove('active','green','amber','blue')});
+  el.classList.add('active',color);
+  currentTab=el.dataset.ftab;
+  updateUI();
+}
+function selectMode(mode){
+  currentMode=mode;
+  document.getElementById('modePickup').classList.toggle('active',mode==='pickup');
+  document.getElementById('modeDelivery').classList.toggle('active',mode==='delivery');
+  updateUI();
+}
+function selectPartner(el){
+  el.closest('[id$="Panel"]').querySelectorAll('.partner-card').forEach(function(c,i){
+    c.classList.remove('selected');
+    if(c===el)selectedPartner=i;
+  });
+  el.classList.add('selected');
+  updateCTA();
+}
+function selectDose(btn){
+  document.querySelectorAll('.dose-btn').forEach(function(b){b.classList.remove('active')});
+  btn.classList.add('active');
+  currentDose=btn.dataset.dose;
+  var fastDoses=['2.5','5','7.5'];
+  document.getElementById('fastHint').style.display=fastDoses.includes(currentDose)?'flex':'none';
+}
+function selectDevice(el,device,price){
+  document.querySelectorAll('.device-row').forEach(function(r){r.classList.remove('active')});
+  document.querySelectorAll('.device-radio').forEach(function(r){r.classList.remove('checked');r.innerHTML=''});
+  el.classList.add('active');
+  var radio=document.getElementById('radio-'+device);
+  radio.classList.add('checked');
+  radio.innerHTML='<span style="width:5px;height:5px;border-radius:50%;background:#fff;display:block"></span>';
+  document.getElementById('heroPrice').innerHTML=price+'<span style="font-size:14px;font-weight:400;color:var(--lilly-muted)">/mo</span>';
+  document.getElementById('selfPayNote').textContent='Starting at '+price+'/mo';
+}
+function selectPay(el){
+  document.querySelectorAll('.pay-row').forEach(function(r,i){
+    r.classList.remove('active');
+    var radio=document.getElementById('payrad'+(i+1));
+    if(radio){radio.classList.remove('checked');radio.innerHTML=''}
+  });
+  el.classList.add('active');
+  var rows=Array.from(document.querySelectorAll('.pay-row'));
+  var idx=rows.indexOf(el)+1;
+  var r=document.getElementById('payrad'+idx);
+  if(r){r.classList.add('checked');r.innerHTML='<span style="width:5px;height:5px;border-radius:50%;background:#fff;display:block"></span>'}
+}
+updateUI();
+</script>
+</body>
+</html>
