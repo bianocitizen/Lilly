@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Klak TV — Marc Johnson</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#111;display:flex;align-items:flex-start;justify-content:center;min-height:100vh;padding:24px 0}
+.phone{width:390px;height:844px;background:#000;color:#fff;font-family:-apple-system,BlinkMacSystemFont,sans-serif;position:relative;border-radius:44px;box-shadow:0 0 0 10px #1e1e1e,0 0 0 11px #2a2a2a,0 30px 80px rgba(0,0,0,.85);overflow:hidden}
+.pg{height:100%;overflow-y:auto;scrollbar-width:none}.pg::-webkit-scrollbar{display:none}
+
+/* ── TOPBAR ── */
+.topbar{position:absolute;top:0;left:0;right:0;z-index:30;padding:14px 18px 0;display:flex;align-items:center;justify-content:space-between;pointer-events:none}
+.topbar>*{pointer-events:all}
+.bk{width:34px;height:34px;border-radius:50%;background:rgba(0,0,0,.6);backdrop-filter:blur(14px);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.top-right{display:flex;align-items:center;gap:7px}
+.meta-pill{height:28px;border-radius:999px;background:rgba(0,0,0,.6);backdrop-filter:blur(14px);padding:0 10px;display:flex;align-items:center;gap:5px;font-size:10px;color:rgba(255,255,255,.65);white-space:nowrap}
+.m-sep{color:rgba(255,255,255,.25);font-size:8px}
+.ib{width:34px;height:34px;border-radius:50%;background:rgba(0,0,0,.6);backdrop-filter:blur(14px);display:flex;align-items:center;justify-content:center;cursor:pointer}
+
+/* ── HERO ── */
+.hero{height:330px;background:linear-gradient(168deg,#060412 0%,#110826 40%,#0c1630 80%,#060c1a 100%);position:relative;overflow:hidden;flex-shrink:0}
+.hero-glow{position:absolute;top:-20px;left:30%;width:300px;height:300px;background:radial-gradient(circle,rgba(110,60,220,.2) 0%,transparent 65%);pointer-events:none}
+.hero-glow2{position:absolute;bottom:0;right:10%;width:200px;height:200px;background:radial-gradient(circle,rgba(40,100,200,.12) 0%,transparent 70%);pointer-events:none}
+.hero-mono{position:absolute;top:44%;left:50%;transform:translate(-50%,-50%);font-size:136px;font-weight:900;color:rgba(255,255,255,.04);letter-spacing:-.04em;line-height:1;user-select:none;white-space:nowrap}
+.hero-lines{position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(255,255,255,.018) 39px,rgba(255,255,255,.018) 40px)}
+.hero-bottom{position:absolute;bottom:0;left:0;right:0;height:170px;background:linear-gradient(to bottom,transparent,rgba(0,0,0,.96))}
+.hero-info{position:absolute;bottom:0;left:0;right:0;padding:0 20px 16px}
+.hi-badge{font-size:9.5px;font-weight:700;color:rgba(255,255,255,.38);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px}
+.hi-name{font-size:30px;font-weight:900;color:#fff;text-transform:uppercase;letter-spacing:.01em;line-height:1}
+.hi-sub{font-size:11px;color:rgba(255,255,255,.38);margin-top:5px;letter-spacing:.02em}
+
+/* ── DETAIL STRIP ── */
+.ds{padding:14px 20px 0;display:flex;align-items:flex-start;gap:0}
+.ds-left{flex:1}
+.ds-title{font-size:16px;font-weight:700;color:#fff;line-height:1.2}
+.ds-sub{font-size:12px;color:rgba(255,255,255,.4);margin-top:3px}
+.ds-desc{font-size:12.5px;color:rgba(255,255,255,.55);margin-top:9px;line-height:1.55}
+.ds-more{display:inline;font-size:12.5px;font-weight:600;color:rgba(255,255,255,.35);cursor:pointer}
+
+/* ── BADGE ROW ── */
+.br{display:flex;align-items:center;gap:5px;padding:10px 20px 0;flex-wrap:wrap}
+.bch{border:1px solid rgba(255,255,255,.22);border-radius:4px;padding:2px 6px;font-size:9px;font-weight:700;color:rgba(255,255,255,.55);letter-spacing:.05em}
+
+/* ── CTA ── */
+.cta{display:flex;gap:9px;padding:14px 20px 0;align-items:center}
+.btn-w{flex:1;height:42px;border-radius:999px;background:#fff;border:none;display:flex;align-items:center;justify-content:center;gap:7px;font-size:13.5px;font-weight:700;color:#000;cursor:pointer}
+.btn-f{height:42px;padding:0 16px;border-radius:999px;background:rgba(255,255,255,.12);border:none;display:flex;align-items:center;gap:5px;font-size:13.5px;font-weight:600;color:#fff;cursor:pointer}
+.btn-x{width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.1);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+
+/* ── SECTION HEADER ── */
+.sh{font-size:17px;font-weight:700;color:#fff;padding:26px 20px 12px;display:flex;align-items:center;justify-content:space-between}
+.sh-r{display:flex;align-items:center;gap:6px;color:rgba(255,255,255,.32);font-size:14px;font-weight:400}
+
+/* ── FILTER PILL (Newest / Chronological) ── */
+.fpill{display:flex;background:rgba(255,255,255,.1);border-radius:999px;padding:2px;gap:0}
+.fp{padding:0 11px;height:24px;border-radius:999px;font-size:11px;font-weight:600;color:rgba(255,255,255,.45);display:flex;align-items:center;cursor:pointer;transition:all .15s}
+.fp.on{background:#fff;color:#000}
+
+/* ── VIDEO LIST (Frosty Fun) ── */
+.vl{padding:0 20px}
+.vr{display:flex;align-items:flex-start;gap:13px;padding:13px 0;border-bottom:1px solid rgba(255,255,255,.07);cursor:pointer}
+.vr:last-child{border-bottom:none}
+.vth{width:112px;height:64px;border-radius:10px;flex-shrink:0;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.vth-pl{width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center}
+.vb{flex:1;min-width:0;padding-top:1px}
+.vs{font-size:9.5px;font-weight:700;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px}
+.vt{font-size:14px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vd{font-size:12px;color:rgba(255,255,255,.42);line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.vm{width:26px;flex-shrink:0;display:flex;align-items:flex-start;justify-content:center;color:rgba(255,255,255,.3);font-size:16px;padding-top:3px;cursor:pointer}
+
+/* ── PARTS CAROUSEL (Trailers) ── */
+.car{display:flex;overflow-x:auto;gap:12px;padding:0 20px;scrollbar-width:none}.car::-webkit-scrollbar{display:none}
+.pc{flex-shrink:0;width:176px;cursor:pointer}
+.pc-th{width:176px;height:98px;border-radius:12px;overflow:hidden;position:relative;margin-bottom:8px}
+.pc-dur{position:absolute;bottom:6px;right:8px;font-size:10px;color:#fff;background:rgba(0,0,0,.65);padding:2px 5px;border-radius:4px;font-weight:600}
+.pc-dot{position:absolute;bottom:6px;left:8px;font-size:10px;color:rgba(255,255,255,.7);background:rgba(0,0,0,.5);padding:2px 6px;border-radius:4px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.pc-title{font-size:13px;font-weight:700;color:#fff;line-height:1.2}
+.pc-meta{font-size:11px;color:rgba(255,255,255,.38);margin-top:2px}
+.pc-menu{font-size:13px;color:rgba(255,255,255,.3);margin-top:4px;display:flex;align-items:center;gap:5px}
+
+/* ── ABOUT CAROUSEL ── */
+.ac-wrap{display:flex;overflow-x:auto;gap:12px;padding:0 20px;scrollbar-width:none}.ac-wrap::-webkit-scrollbar{display:none}
+.ac{flex-shrink:0;width:272px;background:rgba(255,255,255,.07);border-radius:14px;padding:15px 16px}
+.ac-lbl{font-size:9.5px;font-weight:700;color:rgba(255,255,255,.32);text-transform:uppercase;letter-spacing:.08em;margin-bottom:7px}
+.ac-ttl{font-size:15px;font-weight:700;color:#fff;margin-bottom:9px;line-height:1.25}
+.ac-txt{font-size:12.5px;color:rgba(255,255,255,.58);line-height:1.6}
+
+/* ── COMPANIES (Spots style) ── */
+.co-list{padding:0 20px}
+.co{display:flex;align-items:center;gap:13px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.07);cursor:pointer}
+.co:last-child{border-bottom:none}
+.co-ic{width:38px;height:38px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;letter-spacing:-.02em}
+.co-b{flex:1}
+.co-nm{font-size:14px;font-weight:600;color:#fff;margin-bottom:2px}
+.co-mt{font-size:12px;color:rgba(255,255,255,.38)}
+.co-ar{color:rgba(255,255,255,.18);font-size:15px}
+
+/* ── LINKS ── */
+.lk-list{padding:0 20px}
+.lk{display:flex;align-items:center;gap:13px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.07);cursor:pointer}
+.lk:last-child{border-bottom:none}
+.lk-ic{width:38px;height:38px;border-radius:10px;background:rgba(255,255,255,.07);flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.lk-b{flex:1;min-width:0}
+.lk-src{font-size:9.5px;font-weight:700;color:rgba(255,255,255,.32);text-transform:uppercase;letter-spacing:.07em;margin-bottom:2px}
+.lk-nm{font-size:13.5px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lk-yr{font-size:11px;color:rgba(255,255,255,.3);margin-top:1px}
+.lk-ar{color:rgba(255,255,255,.18);font-size:15px}
+
+.spacer{height:44px}
+
+/* ── MODAL ── */
+.ovl{position:absolute;inset:0;background:rgba(0,0,0,.75);z-index:100;display:none;align-items:flex-end;animation:fadeIn .2s}
+.ovl.open{display:flex}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.sheet{width:100%;height:82%;background:#1c1c1e;border-radius:20px 20px 0 0;display:flex;flex-direction:column;animation:slideUp .25s ease}
+@keyframes slideUp{from{transform:translateY(40px);opacity:.6}to{transform:translateY(0);opacity:1}}
+.drag-bar{width:36px;height:4px;background:rgba(255,255,255,.18);border-radius:2px;margin:10px auto 0}
+.mhdr{display:flex;align-items:center;justify-content:space-between;padding:13px 20px 0}
+.m-src{font-size:10px;font-weight:700;color:rgba(255,255,255,.38);text-transform:uppercase;letter-spacing:.08em}
+.m-cls{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;color:#fff;font-weight:300;flex-shrink:0}
+.mbody{flex:1;overflow-y:auto;padding:14px 20px 28px;scrollbar-width:none}.mbody::-webkit-scrollbar{display:none}
+.m-title{font-size:20px;font-weight:800;color:#fff;line-height:1.2;margin-bottom:5px}
+.m-sub{font-size:12px;color:rgba(255,255,255,.38);margin-bottom:18px}
+.m-txt{font-size:13.5px;color:rgba(255,255,255,.62);line-height:1.65;margin-bottom:16px}
+.m-quote{border-left:3px solid rgba(255,255,255,.22);padding:11px 14px;background:rgba(255,255,255,.05);border-radius:0 10px 10px 0;font-size:13.5px;font-style:italic;color:rgba(255,255,255,.7);line-height:1.6;margin-bottom:16px}
+.m-sh{font-size:13px;font-weight:700;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.07em;margin:18px 0 10px}
+.m-car{display:flex;overflow-x:auto;gap:10px;padding-bottom:4px;scrollbar-width:none}.m-car::-webkit-scrollbar{display:none}
+.m-qcard{flex-shrink:0;width:230px;background:rgba(255,255,255,.06);border-radius:12px;padding:14px}
+.m-qcard-txt{font-size:13px;font-style:italic;color:rgba(255,255,255,.65);line-height:1.55;margin-bottom:8px}
+.m-qcard-src{font-size:10px;font-weight:700;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.06em}
+</style>
+</head>
+<body>
+<div class="phone">
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="bk" onclick="window.location.href='klaktv_home.html'">
+    <svg width=14 height=14 viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width=2.5 stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+  </div>
+  <div class="top-right">
+    <div class="meta-pill">
+      <span>· Pro</span><span class="m-sep">·</span><span>Active</span><span class="m-sep">·</span><span>Since 1995</span>
+    </div>
+    <div class="ib">
+      <svg width=14 height=14 viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width=2 stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+    </div>
+    <div class="ib">
+      <svg width=14 height=14 viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width=2 stroke-linecap="round" stroke-linejoin="round"><circle cx=18 cy=5 r=3/><circle cx=6 cy=12 r=3/><circle cx=18 cy=19 r=3/><line x1=8.59 y1=13.51 x2=15.42 y2=17.49/><line x1=15.41 y1=6.51 x2=8.59 y2=10.49/></svg>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN SCROLL -->
+<div class="pg" id="skPg">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-glow"></div>
+    <div class="hero-glow2"></div>
+    <div class="hero-lines"></div>
+    <div class="hero-mono">MJ</div>
+    <div class="hero-bottom"></div>
+    <div class="hero-info">
+      <div class="hi-badge">Street · Los Angeles, CA · 1975</div>
+      <div class="hi-name">Marc<br>Johnson</div>
+      <div class="hi-sub">Chocolate Skateboards · Lakai Footwear · Fourstar</div>
+    </div>
+  </div>
+
+  <!-- DETAIL STRIP -->
+  <div class="ds">
+    <div class="ds-left">
+      <div class="ds-title">Marc Johnson — MJ</div>
+      <div class="ds-sub">Street · Pro since 1995</div>
+      <div class="ds-desc">
+        One of the most technically gifted and stylistically precise street skaters of his generation. His part in Lakai's <em>Fully Flared</em> is widely considered one of the greatest ever filmed.
+        <span class="ds-more" onclick="openModal('bio')"> MORE</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- BADGE ROW -->
+  <div class="br">
+    <div class="bch">STREET</div>
+    <div class="bch">TECH</div>
+    <div class="bch">VHS ERA</div>
+    <div class="bch">CHOCOLATE</div>
+    <div class="bch">LAKAI</div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta">
+    <button class="btn-w">
+      <svg width=13 height=13 viewBox="0 0 24 24" fill="#000"><polygon points="5,3 19,12 5,21"/></svg>
+      Watch Clips
+    </button>
+    <button class="btn-f">
+      <svg width=13 height=13 viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width=2.5 stroke-linecap="round"><line x1=12 y1=5 x2=12 y2=19/><line x1=5 y1=12 x2=19 y2=12/></svg>
+      Follow
+    </button>
+    <button class="btn-x">
+      <svg width=16 height=4 viewBox="0 0 20 4" fill="#fff"><circle cx=2 cy=2 r=2/><circle cx=10 cy=2 r=2/><circle cx=18 cy=2 r=2/></svg>
+    </button>
+  </div>
+
+  <!-- ── VIDEOS SECTION ── -->
+  <div class="sh">
+    <span>Videos</span>
+    <div class="fpill">
+      <div class="fp on" id="fp-new" onclick="setFilter('new')">Newest</div>
+      <div class="fp" id="fp-chr" onclick="setFilter('chr')">Chronological</div>
+    </div>
+  </div>
+
+  <div class="vl" id="vl-new">
+    <!-- Koston & Johnson 2015 -->
+    <div class="vr">
+      <div class="vth" style="background:linear-gradient(135deg,#071a1a 0%,#0d2d2a 100%)">
+        <div class="vth-pl"><svg width=9 height=9 viewBox="0 0 24 24" fill="#fff"><polygon points="5,3 19,12 5,21"/></svg></div>
+      </div>
+      <div class="vb">
+        <div class="vs">Lakai · 2015</div>
+        <div class="vt">Koston &amp; Johnson</div>
+        <div class="vd">MJ and Eric Koston share a full-length in a career-defining split effort across Los Angeles. Smooth lines, impossible transitions.</div>
+      </div>
+      <div class="vm">···</div>
+    </div>
+    <!-- Pretty Sweet 2012 -->
+    <div class="vr">
+      <div class="vth" style="background:linear-gradient(135deg,#16071e 0%,#260d30 100%)">
+        <div class="vth-pl"><svg width=9 height=9 viewBox="0 0 24 24" fill="#fff"><polygon points="5,3 19,12 5,21"/></svg></div>
+      </div>
+      <div class="vb">
+        <div class="vs">Girl/Chocolate · 2012</div>
+        <div class="vt">Pretty Sweet</div>
+        <div class="vd">A cinematic feature by Spike Jonze and Guy Mariano. MJ's part blends architectural elegance with technical mastery across LA's iconic spots.</div>
+      </div>
+      <div class="vm">···</div>
+    </div>
+    <!-- Fully Flared 2007 -->
+    <div class="vr">
+      <div class="vth" style="background:linear-gradient(135deg,#1a0a00 0%,#2e1500 100%)">
+        <div class="vth-pl"><svg width=9 height=9 viewBox="0 0 24 24" fill="#fff"><polygon points="5,3 19,12 5,21"/></svg></div>
+      </div>
+      <div class="vb">
+        <div class="vs">Lakai · 2007</div>
+        <div class="vt">Fully Flared</div>
+        <div class="vd">Directed by Ty Evans &amp; Spike Jonze. MJ's opener is considered one of the greatest parts in skateboarding history — effortless power on every line.</div>
+      </div>
+      <div class="vm">···</div>
+    </div>
+    <!-- Yeah Right! 2003 -->
+    <div class="vr">
+      <div class="vth" style="background:linear-gradient(135deg,#080a1c 0%,#0d102e 100%)">
+        <div class="vth-pl"><svg width=9 height=9 viewBox="0 0 24 24" fill="#fff"><polygon points="5,3 19,12 5,21"/></svg></div>
+      </div>
+      <div class="vb">
+        <div class="vs">Girl Skateboards · 2003</div>
+        <div class="vt">Yeah Right!</div>
+        <div class="vd">Landmark Spike Jonze production. MJ's section demonstrates a refined approach to Los Angeles street terrain with unrivaled consistency.</div>
+      </div>
+      <div class="vm">···</div>
+    </div>
+    <!-- Chocolate Tour 1999 -->
+    <div class="vr">
+      <div class="vth" style="background:linear-gradient(135deg,#1a0800 0%,#2a1200 100%)">
+        <div class="vth-pl"><svg width=9 height=9 viewBox="0 0 24 24" fill="#fff"><polygon points="5,3 19,12 5,21"/></svg></div>
+      </div>
+      <div class="vb">
+        <div class="vs">Chocolate Skateboards · 1999</div>
+        <div class="vt">Chocolate Tour</div>
+        <div class="vd">Cross-country tour document that helped establish MJ as a marquee name. Raw, spontaneous footage from the road with the full Chocolate squad.</div>
+      </div>
+      <div class="vm">···</div>
+    </div>
+    <!-- Mouse 1996 -->
+    <div class="vr">
+      <div class="vth" style="background:linear-gradient(135deg,#001a08 0%,#002e12 100%)">
+        <div class="vth-pl"><svg width=9 height=9 viewBox="0 0 24 24" fill="#fff"><polygon points="5,3 19,12 5,21"/></svg></div>
+      </div>
+      <div class="vb">
+        <div class="vs">Girl Skateboards · 1996</div>
+        <div class="vt">Mouse</div>
+        <div class="vd">MJ's breakout appearance in the underground classic directed by Spike Jonze. Establishes the low-impact, high-consequence style he'd perfect over the next decade.</div>
+      </div>
+      <div class="vm">···</div>
+    </div>
+  </div>
+
+  <!-- ── VIDEO PARTS ── -->
+  <div class="sh">
+    <span>Video Parts</span>
+    <span class="sh-r">›</span>
+  </div>
+  <div class="car">
+    <!-- Fully Flared -->
+    <div class="pc">
+      <div class="pc-th" style="background:linear-gradient(135deg,#1a0a00 0%,#2e1500 100%)">
+        <div style="display:flex;align-items:center;justify-content:center;height:100%">
+          <div style="width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center">
+            <svg width=10 height=10 viewBox="0 0 24 24" fill="#fff"><polygon points="5,3 19,12 5,21"/></svg>
+          </div>
+        </div>
+        <div class="pc-dot">Solo Part</div>
+        <div class="pc-dur">▶ 6:42</div>
+      </div>
+      <div class="pc-title">Fully Flared</div>
+      <div class="pc-meta">Lakai · 2007</div>
+      <div class="pc-menu">··· <span style="font-size:10px;color:rgba(255,255,255,.25)">Download</span></div>
+    </div>
+    <!-- Pretty Sweet -->
+    <div class="pc">
+      <div class="pc-th" style="background:linear-gradient(135deg,#16071e 0%,#260d30 100%)">
+        <div style="display:flex;align-items:center;justify-content:center;height:100%">
+          <div style="width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center">
+            <svg width=10 height=10 viewBox="0 0 24 24" fill="#fff"><polygon points="5,3 19,12 5,21"/></svg>
+          </div>
+        </div>
+        <div class="pc-dot">Solo Part</div>
+        <div class="pc-dur">▶ 5:18</div>
+      </div>
+      <div class="pc-title">Pretty Sweet</div>
+      <div class="pc-meta">Girl/Chocolate · 2012</div>
+      <div class="pc-menu">···</div>
+    </div>
+    <!-- Koston & Johnson -->
+    <div class="pc">
+      <div class="pc-th" style="background:linear-gradient(135deg,#071a1a 0%,#0d2d2a 100%)">
+        <div style="display:flex;align-items:center;justify-content:center;height:100%">
+          <div style="width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center">
+            <svg width=10 height=10 viewBox="0 0 24 24" fill="#fff"><polygon points="5,3 19,12 5,21"/></svg>
+          </div>
+        </div>
+        <div class="pc-dot">Split Part</div>
+        <div class="pc-dur">▶ 4:55</div>
+      </div>
+      <div class="pc-title">Koston &amp; Johnson</div>
+      <div class="pc-meta">Lakai · 2015</div>
+      <div class="pc-menu">···</div>
+    </div>
+    <!-- Yeah Right! -->
+    <div class="pc">
+      <div class="pc-th" style="background:linear-gradient(135deg,#080a1c 0%,#0d102e 100%)">
+        <div style="display:flex;align-items:center;justify-content:center;height:100%">
+          <div style="width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center">
+            <svg width=10 height=10 viewBox="0 0 24 24" fill="#fff"><polygon points="5,3 19,12 5,21"/></svg>
+          </div>
+        </div>
+        <div class="pc-dot">Solo Part</div>
+        <div class="pc-dur">▶ 4:12</div>
+      </div>
+      <div class="pc-title">Yeah Right!</div>
+      <div class="pc-meta">Girl Skateboards · 2003</div>
+      <div class="pc-menu">···</div>
+    </div>
+  </div>
+
+  <!-- ── ABOUT (horizontal cards) ── -->
+  <div class="sh"><span>About</span></div>
+  <div class="ac-wrap">
+    <div class="ac" style="width:280px">
+      <div class="ac-lbl">Marc Johnson</div>
+      <div class="ac-ttl">Street skating redefined by precision</div>
+      <div class="ac-txt">Born in 1975 in Reno, Nevada, Marc Johnson turned professional in the mid-90s and spent three decades redefining what street skating could look and feel like — quiet power, exact technique, no wasted motion.</div>
+    </div>
+    <div class="ac" style="width:260px">
+      <div class="ac-lbl">Early Career</div>
+      <div class="ac-ttl">From Reno to Girl Skateboards</div>
+      <div class="ac-txt">MJ's early footage circulated on VHS tapes before Girl Skateboards signed him. His part in <em>Mouse</em> (1996) introduced a generation to a skater who seemed incapable of an awkward move.</div>
+    </div>
+    <div class="ac" style="width:260px">
+      <div class="ac-lbl">Legacy</div>
+      <div class="ac-ttl">Co-founder · Lakai &amp; Fourstar</div>
+      <div class="ac-txt">Beyond skating, MJ co-founded Lakai Footwear in 1999 with Guy Mariano and others, creating one of the most influential skate shoe companies of the 2000s. Fourstar Clothing followed in 2003.</div>
+    </div>
+  </div>
+
+  <!-- ── COMPANIES ── -->
+  <div class="sh"><span>Companies</span></div>
+  <div class="co-list">
+    <div class="co">
+      <div class="co-ic" style="background:linear-gradient(135deg,#1a0800,#2e1200)">
+        <span style="color:rgba(255,150,50,.9);font-size:10px">CH</span>
+      </div>
+      <div class="co-b">
+        <div class="co-nm">Chocolate Skateboards</div>
+        <div class="co-mt">Pro Skater · 1996 – Present</div>
+      </div>
+      <div class="co-ar">›</div>
+    </div>
+    <div class="co">
+      <div class="co-ic" style="background:linear-gradient(135deg,#071818,#0d2826)">
+        <span style="color:rgba(60,200,180,.9);font-size:10px">LK</span>
+      </div>
+      <div class="co-b">
+        <div class="co-nm">Lakai Footwear</div>
+        <div class="co-mt">Co-Founder · 1999 – Present</div>
+      </div>
+      <div class="co-ar">›</div>
+    </div>
+    <div class="co">
+      <div class="co-ic" style="background:linear-gradient(135deg,#141407,#242408)">
+        <span style="color:rgba(210,200,60,.9);font-size:10px">4S</span>
+      </div>
+      <div class="co-b">
+        <div class="co-nm">Fourstar Clothing</div>
+        <div class="co-mt">Co-Founder · 2003 – Present</div>
+      </div>
+      <div class="co-ar">›</div>
+    </div>
+    <div class="co">
+      <div class="co-ic" style="background:linear-gradient(135deg,#080818,#0e0e2e)">
+        <span style="color:rgba(120,120,255,.9);font-size:10px">VT</span>
+      </div>
+      <div class="co-b">
+        <div class="co-nm">Venture Trucks</div>
+        <div class="co-mt">Team Rider · 2000s</div>
+      </div>
+      <div class="co-ar">›</div>
+    </div>
+    <div class="co">
+      <div class="co-ic" style="background:linear-gradient(135deg,#1a0606,#2e0808)">
+        <span style="color:rgba(255,80,60,.9);font-size:10px">SF</span>
+      </div>
+      <div class="co-b">
+        <div class="co-nm">Spitfire Wheels</div>
+        <div class="co-mt">Team Rider · 2001 – Present</div>
+      </div>
+      <div class="co-ar">›</div>
+    </div>
+  </div>
+
+  <!-- ── LINKS ── -->
+  <div class="sh"><span>Links</span></div>
+  <div class="lk-list">
+    <div class="lk" onclick="openModal('link1')">
+      <div class="lk-ic">
+        <svg width=16 height=16 viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.5)" stroke-width=2 stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1=16 y1=13 x2=8 y2=13/><line x1=16 y1=17 x2=8 y2=17/><polyline points="10 9 9 9 8 9"/></svg>
+      </div>
+      <div class="lk-b">
+        <div class="lk-src">Thrasher Magazine</div>
+        <div class="lk-nm">The Marc Johnson Interview</div>
+        <div class="lk-yr">2008 · Interview</div>
+      </div>
+      <div class="lk-ar">›</div>
+    </div>
+    <div class="lk" onclick="openModal('link2')">
+      <div class="lk-ic">
+        <svg width=16 height=16 viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.5)" stroke-width=2 stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      </div>
+      <div class="lk-b">
+        <div class="lk-src">Skateboarder Magazine</div>
+        <div class="lk-nm">Fully Flared: Behind the Scenes</div>
+        <div class="lk-yr">2007 · Feature</div>
+      </div>
+      <div class="lk-ar">›</div>
+    </div>
+    <div class="lk" onclick="openModal('link3')">
+      <div class="lk-ic">
+        <svg width=16 height=16 viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.5)" stroke-width=2 stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      </div>
+      <div class="lk-b">
+        <div class="lk-src">Jenkem Magazine</div>
+        <div class="lk-nm">The Story of Lakai Footwear</div>
+        <div class="lk-yr">2019 · Long-Read</div>
+      </div>
+      <div class="lk-ar">›</div>
+    </div>
+    <div class="lk" onclick="openModal('link4')">
+      <div class="lk-ic">
+        <svg width=16 height=16 viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.5)" stroke-width=2 stroke-linecap="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x=1 y=5 width=15 height=14 rx=2 ry=2/></svg>
+      </div>
+      <div class="lk-b">
+        <div class="lk-src">TransWorld Skateboarding</div>
+        <div class="lk-nm">MJ's Greatest Lines — A Retrospective</div>
+        <div class="lk-yr">2012 · Video Essay</div>
+      </div>
+      <div class="lk-ar">›</div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+</div><!-- /pg -->
+
+<!-- ── MODAL OVERLAY ── -->
+<div class="ovl" id="modal" onclick="closeModalOuter(event)">
+  <div class="sheet" id="sheet">
+    <div class="drag-bar"></div>
+    <div class="mhdr">
+      <div class="m-src" id="m-src"></div>
+      <div class="m-cls" onclick="closeModal()">✕</div>
+    </div>
+    <div class="mbody" id="mbody"></div>
+  </div>
+</div>
+
+</div><!-- /phone -->
+
+<script>
+/* ── FILTER ── */
+function setFilter(v){
+  document.getElementById('fp-new').classList.toggle('on', v==='new');
+  document.getElementById('fp-chr').classList.toggle('on', v==='chr');
+  // Chronological = reverse the list (simple demo)
+  var vl = document.getElementById('vl-new');
+  var rows = Array.from(vl.querySelectorAll('.vr'));
+  if(v==='chr') rows.reverse().forEach(r=>vl.appendChild(r));
+  else rows.reverse().forEach(r=>vl.appendChild(r));
+}
+
+/* ── MODAL CONTENT ── */
+var MODALS = {
+  'bio': {
+    src: 'Marc Johnson',
+    body: `<div class="m-title">Marc Johnson — MJ</div>
+<div class="m-sub">Reno, Nevada · Born 1975</div>
+<div class="m-txt">Marc Johnson is widely regarded as one of the most technically gifted and stylistically precise street skaters of his generation. His ability to combine technical difficulty with an almost imperceptible ease of execution set him apart from the moment his earliest footage began circulating on VHS tapes in the early 1990s.</div>
+<div class="m-quote">"I don't think about tricks. I think about movement — how I'm reading the environment and responding to it. The trick is just what happens at the end of that conversation."</div>
+<div class="m-txt">After turning professional in the mid-90s with Girl Skateboards, MJ went on to co-found Lakai Footwear (1999) and Fourstar Clothing (2003) — two companies that would shape the aesthetic identity of skateboarding throughout the 2000s.</div>
+<div class="m-sh">Key Moments</div>
+<div class="m-car">
+<div class="m-qcard"><div class="m-qcard-txt">"Mouse changed everything. Nobody had filmed skating quite like that."</div><div class="m-qcard-src">Spike Jonze on Mouse (1996)</div></div>
+<div class="m-qcard"><div class="m-qcard-txt">"The Fully Flared opener is as close to perfect as a video part gets."</div><div class="m-qcard-src">Thrasher Mag, 2007</div></div>
+<div class="m-qcard"><div class="m-qcard-txt">"MJ skates like water — everything flows from the same source."</div><div class="m-qcard-src">Eric Koston</div></div>
+</div>`
+  },
+  'link1': {
+    src: 'Thrasher Magazine · 2008',
+    body: `<div class="m-title">The Marc Johnson Interview</div>
+<div class="m-sub">By Michael Burnett · Thrasher Magazine, 2008</div>
+<div class="m-txt">By the time Fully Flared dropped in 2007, Marc Johnson had already spent more than a decade quietly rewriting what it meant to be a professional street skater. We sat down with MJ in a coffee shop in Silver Lake to talk about the video, the company, and why he's still not sure any of it makes sense.</div>
+<div class="m-quote">"The whole point for me has always been to find something true in the movement. If it looks effortless it's because I spent two years figuring out why it felt wrong."</div>
+<div class="m-txt">On the subject of Lakai, Johnson is characteristically understated. The brand he co-founded with Guy Mariano and others in 1999 had become, by 2008, one of the most respected names in skateboarding — not through aggressive marketing but through a consistent commitment to authenticity.</div>
+<div class="m-txt">When asked whether Fully Flared represents his best work, he pauses for a long time before answering.</div>
+<div class="m-quote">"I don't know what my best work is. I know which sessions felt right. The rest is what the camera happened to catch."</div>
+<div class="m-sh">Related Quotes</div>
+<div class="m-car">
+<div class="m-qcard"><div class="m-qcard-txt">"Every spot has a right answer. I'm just trying to find it before I run out of attempts."</div><div class="m-qcard-src">MJ, on approach</div></div>
+<div class="m-qcard"><div class="m-qcard-txt">"Style isn't something you add on top. It's what's left when you remove everything that's unnecessary."</div><div class="m-qcard-src">MJ, Thrasher 2008</div></div>
+<div class="m-qcard"><div class="m-qcard-txt">"I want to feel like I belonged there. Like the spot was already waiting."</div><div class="m-qcard-src">MJ, on spot selection</div></div>
+</div>`
+  },
+  'link2': {
+    src: 'Skateboarder Magazine · 2007',
+    body: `<div class="m-title">Fully Flared: Behind the Scenes</div>
+<div class="m-sub">By Jake Phelps · Skateboarder Magazine, November 2007</div>
+<div class="m-txt">It took three years, two directors (Ty Evans and Spike Jonze), and enough high-definition footage to fill a small archive. The result — Lakai's Fully Flared — was released in late 2007 and immediately entered the conversation as one of the most significant skateboarding films ever made.</div>
+<div class="m-txt">MJ's opener was filmed primarily across Los Angeles, with select sessions in New York and Barcelona. What the final cut doesn't show is the volume of failed attempts, the sessions that ended in injury, or the months during which nothing usable was produced at all.</div>
+<div class="m-quote">"There were weeks where I didn't land anything worth keeping. That's part of it. You're looking for something specific and you can't force it."</div>
+<div class="m-sh">Director Notes</div>
+<div class="m-car">
+<div class="m-qcard"><div class="m-qcard-txt">"MJ is the most consistent person I've ever filmed. He'd land something perfect and just walk away."</div><div class="m-qcard-src">Ty Evans, Director</div></div>
+<div class="m-qcard"><div class="m-qcard-txt">"The challenge was keeping up with him, not motivating him."</div><div class="m-qcard-src">Spike Jonze, Co-Director</div></div>
+</div>`
+  },
+  'link3': {
+    src: 'Jenkem Magazine · 2019',
+    body: `<div class="m-title">The Story of Lakai Footwear</div>
+<div class="m-sub">By Jenkem Staff · 2019 · Long-Read</div>
+<div class="m-txt">In 1999, a small group of professional skateboarders — including Marc Johnson, Guy Mariano, Mike Carroll, Rick Howard, and others — decided they were tired of riding for shoe companies that didn't understand skateboarding from the inside. They built Lakai.</div>
+<div class="m-txt">Twenty years later, Lakai remains one of the last rider-owned skate shoe companies standing. In an era of acquisitions and corporate restructuring, that fact alone is remarkable.</div>
+<div class="m-quote">"We made it for people who skate. Everything else follows from that. If you understand that, you understand everything about the company."</div>
+<div class="m-txt">MJ's role extended beyond riding for the brand. As a co-founder, he was involved in decisions about product, team, and identity from the beginning — a rare dual position in an industry that typically keeps athletes and business separate.</div>
+<div class="m-sh">Brand Timeline</div>
+<div class="m-car">
+<div class="m-qcard"><div class="m-qcard-txt">1999 — Lakai Footwear founded by MJ, Guy Mariano, Rick Howard, Mike Carroll, and others.</div><div class="m-qcard-src">Founding</div></div>
+<div class="m-qcard"><div class="m-qcard-txt">2007 — Fully Flared elevates the brand to global recognition. MJ's part becomes the defining document.</div><div class="m-qcard-src">Peak Moment</div></div>
+<div class="m-qcard"><div class="m-qcard-txt">2019 — Two decades in, still rider-owned. One of the last of its kind.</div><div class="m-qcard-src">Legacy</div></div>
+</div>`
+  },
+  'link4': {
+    src: 'TransWorld Skateboarding · 2012',
+    body: `<div class="m-title">MJ's Greatest Lines — A Retrospective</div>
+<div class="m-sub">TransWorld Skateboarding · Video Essay, 2012</div>
+<div class="m-txt">By the release of Pretty Sweet in 2012, Marc Johnson had accumulated enough landmark footage to fill a career twice over. This retrospective documents ten of his most celebrated sequences — not just the tricks, but the full lines: the approach, the read, and the exit.</div>
+<div class="m-txt">What distinguishes MJ's lines from those of his peers is not individual trick difficulty but compositional intelligence — the way each element connects to the next, as though the entire sequence was planned before a single wheel rolled.</div>
+<div class="m-quote">"A line is a sentence. If one word is wrong the whole thing loses meaning."</div>
+<div class="m-sh">Top Moments</div>
+<div class="m-car">
+<div class="m-qcard"><div class="m-qcard-txt">Fully Flared opener — Hubba Hideout kickflip back tail. Replayed more than any other sequence in the film.</div><div class="m-qcard-src">Ranked #1 · 2012</div></div>
+<div class="m-qcard"><div class="m-qcard-txt">Yeah Right! — Hollywood High line. Three-trick sequence on one of LA's most intimidating spots.</div><div class="m-qcard-src">Ranked #2 · 2012</div></div>
+<div class="m-qcard"><div class="m-qcard-txt">Pretty Sweet — Downtown LA line. Six tricks over 40 meters. Zero wasted motion.</div><div class="m-qcard-src">Ranked #3 · 2012</div></div>
+</div>`
+  }
+};
+
+function openModal(key){
+  var m = MODALS[key];
+  if(!m) return;
+  document.getElementById('m-src').textContent = m.src;
+  document.getElementById('mbody').innerHTML = m.body;
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal(){
+  document.getElementById('modal').classList.remove('open');
+}
+function closeModalOuter(e){
+  if(e.target===document.getElementById('modal')) closeModal();
+}
+</script>
+</body>
+</html>
