@@ -10,11 +10,11 @@ html,body{background:#1a1a1a;display:flex;align-items:flex-start;justify-content
 .htop{position:absolute;top:0;left:0;right:0;height:100px;background:linear-gradient(to bottom,rgba(0,0,0,.55),transparent);z-index:2;pointer-events:none}
 .hfrost{position:absolute;bottom:0;left:0;right:0;height:280px;backdrop-filter:blur(10px) saturate(120%);-webkit-backdrop-filter:blur(10px) saturate(120%);background:linear-gradient(to bottom,transparent 0%,rgba(0,0,0,.42) 38%,rgba(0,0,0,.88) 100%);-webkit-mask-image:linear-gradient(to bottom,transparent 0%,black 30%);mask-image:linear-gradient(to bottom,transparent 0%,black 30%);z-index:2;pointer-events:none}
 .hcontent{position:absolute;bottom:0;left:0;right:0;z-index:3;display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 20px 18px}
-.hbadge{display:inline-flex;background:rgba(255,255,255,.12);backdrop-filter:blur(8px);border-radius:999px;padding:3px 10px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.85);margin-bottom:8px}
-.htitle{font-family:"Big Shoulders Display",sans-serif;font-size:24px;font-weight:900;color:#FF4F33;text-transform:uppercase;letter-spacing:.02em;line-height:1.1;margin-bottom:4px}
-.hmeta{font-size:11px;color:rgba(255,255,255,.55);margin-bottom:14px}
+.htags{display:flex;flex-wrap:wrap;justify-content:center;gap:5px;margin-bottom:10px}
+.htag{background:rgba(0,0,0,.6);border-radius:5px;padding:3px 8px;font-size:9px;font-weight:400;color:rgba(255,255,255,.85);letter-spacing:.06em;text-transform:uppercase}
+.htitle{font-family:"Big Shoulders Display",sans-serif;font-size:42px;font-weight:900;color:#FF4F33;text-transform:uppercase;letter-spacing:.01em;line-height:.92;margin-bottom:14px}
 .hbtns{display:flex;align-items:center;gap:10px;margin-bottom:16px}
-.hwatch{border-radius:999px;height:44px;padding:0 24px;display:flex;align-items:center;gap:6px;cursor:pointer;border:none;font-size:14px;font-weight:700}
+.hwatch{border-radius:999px;height:42px;padding:0 24px;display:flex;align-items:center;justify-content:center;gap:7px;cursor:pointer;border:none;font-size:13.5px;font-weight:700}
 .hwatch.watch{background:#fff;color:#000}
 .hwatch.resume{background:rgba(255,255,255,.2);color:#fff;backdrop-filter:blur(10px)}
 .hplus{width:44px;height:44px;border-radius:999px;background:rgba(255,255,255,.15);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;flex-shrink:0}
@@ -25,6 +25,9 @@ html,body{background:#1a1a1a;display:flex;align-items:flex-start;justify-content
 .touch-next{position:absolute;top:0;right:0;width:30%;height:100%;z-index:10;cursor:pointer}
 .content{background:#000;padding-top:24px;padding-bottom:80px}
 .sec{padding:0 0 8px}
+.sec + .sec{margin-top:32px !important}
+/* thumbs neutros sem cor */
+.cw,.vc,.fc,.bc{background:#1c1c1e !important;background-image:none !important}
 .stitle{font-size:17px;font-weight:700;padding:0 16px 10px;color:#fff;display:flex;align-items:center;gap:4px}
 .stitle-arrow{color:rgba(255,255,255,.4);font-size:15px;font-weight:400}
 .row{display:flex;overflow-x:auto;gap:12px;padding:0 16px;scrollbar-width:none}
@@ -184,9 +187,8 @@ html,body{background:#1a1a1a;display:flex;align-items:flex-start;justify-content
       <div class="touch-prev" id="tprev"></div>
       <div class="touch-next" id="tnext"></div>
       <div class="hcontent">
-        <div class="hbadge" id="hb">Full-Length</div>
+        <div class="htags" id="hb"></div>
         <div class="htitle" id="ht">Foundation<br>Today Tomorrow Forever</div>
-        <div class="hmeta" id="hm">Don Luong · 22m</div>
         <div class="hbtns">
           <div class="hwatch watch" id="watchBtn" onclick="openPlayer()">
             <svg id="watchIcon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
@@ -291,9 +293,8 @@ function go(n){
   cur=((n%N)+N)%N;
   document.getElementById('s'+cur).classList.add('on');
   const s=SL[cur];
-  document.getElementById('hb').textContent=s.badge;
+  document.getElementById('hb').innerHTML=s.meta.split('·').map(function(t){return '<span class="htag">'+t.trim()+'</span>';}).join('');
   document.getElementById('ht').innerHTML=s.title;
-  document.getElementById('hm').textContent=s.meta;
   // botão Watch / Resume
   updateWatchBtn();
   for(let i=0;i<N;i++){document.getElementById('d'+i).style.width=i===cur?'26px':'5px';document.getElementById('di'+i).style.width='0%';}
@@ -390,9 +391,8 @@ function openFromCW(){
   cur=watchedSlide;
   document.getElementById('s'+cur).classList.add('on');
   const s=SL[cur];
-  document.getElementById('hb').textContent=s.badge;
+  document.getElementById('hb').innerHTML=s.meta.split('·').map(function(t){return '<span class="htag">'+t.trim()+'</span>';}).join('');
   document.getElementById('ht').innerHTML=s.title;
-  document.getElementById('hm').textContent=s.meta;
   for(let i=0;i<N;i++){document.getElementById('d'+i).style.width=i===cur?'26px':'5px';document.getElementById('di'+i).style.width='0%';}
   // Abrir player
   openPlayer();
@@ -419,5 +419,5 @@ hero.addEventListener('touchend',e=>{
   sx=null;sy=null;
 },{passive:true});
 function setT(el){document.querySelectorAll('.ti').forEach(t=>t.querySelector('.ti-bg').classList.remove('on'));el.querySelector('.ti-bg').classList.add('on');}
-raf=requestAnimationFrame(tick);
+go(0);
 </script>
