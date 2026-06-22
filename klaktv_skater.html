@@ -34,11 +34,11 @@ html,body{background:#111;display:flex;align-items:flex-start;justify-content:ce
   scrollbar-width:none;
 }
 .feat-wrap::-webkit-scrollbar{display:none}
-.feat-wrap::before,.feat-wrap::after{content:'';flex-shrink:0;width:32px}
+.feat-wrap::before,.feat-wrap::after{content:'';flex-shrink:0;width:20px}
 .feat-card{
   flex-shrink:0;
-  width:326px;
-  height:400px;
+  width:350px;
+  height:430px;
   border-radius:20px;
   scroll-snap-align:center;
   position:relative;
@@ -81,7 +81,7 @@ html,body{background:#111;display:flex;align-items:flex-start;justify-content:ce
 .bch{border:1px solid rgba(255,255,255,.22);border-radius:4px;padding:2px 6px;font-size:9px;font-weight:700;color:rgba(255,255,255,.55);letter-spacing:.05em}
 
 /* CTA */
-.cta{display:flex;gap:9px;padding:14px 20px 0;align-items:center}
+.cta{display:flex;gap:9px;padding:14px 20px 0;margin-bottom:32px;align-items:center}
 .btn-w{flex:1;height:42px;border-radius:999px;background:#fff;border:none;display:flex;align-items:center;justify-content:center;gap:7px;font-size:13.5px;font-weight:700;color:#000;cursor:pointer}
 .btn-f{height:42px;padding:0 16px;border-radius:999px;background:rgba(255,255,255,.12);border:none;display:flex;align-items:center;gap:5px;font-size:13.5px;font-weight:600;color:#fff;cursor:pointer}
 
@@ -178,8 +178,8 @@ html,body{background:#111;display:flex;align-items:flex-start;justify-content:ce
   <div class="bk" onclick="window.location.href='klaktv_home.html'"><svg width=14 height=14 viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width=2.5 stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg></div>
   <div class="top-right">
     <div class="meta-pill" id="top-meta"></div>
-    <div class="ib"><svg width=14 height=14 viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width=2 stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg></div>
-    <div class="ib"><svg width=14 height=14 viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width=2 stroke-linecap="round" stroke-linejoin="round"><circle cx=18 cy=5 r=3/><circle cx=6 cy=12 r=3/><circle cx=18 cy=19 r=3/><line x1=8.59 y1=13.51 x2=15.42 y2=17.49/><line x1=15.41 y1=6.51 x2=8.59 y2=10.49/></svg></div>
+    <div class="ib"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a2 2 0 002 2h12a2 2 0 002-2v-7M12 16V3M8 7l4-4 4 4"/></svg></div>
+
   </div>
 </div>
 
@@ -193,11 +193,9 @@ html,body{background:#111;display:flex;align-items:flex-start;justify-content:ce
       <div class="feat-info">
         <div class="feat-name">Marc<br>Johnson</div>
         <div class="feat-tags">
-          <div class="feat-dot"><svg width=8 height=8 viewBox="0 0 24 24" fill="#000"><circle cx=12 cy=12 r=8/></svg></div>
           <div class="feat-tag">Pro &middot; Street &middot; Los Angeles</div>
         </div>
         <div class="feat-badges">
-          <div class="feat-badge">Street</div>
           <div class="feat-badge">Chocolate</div>
           <div class="feat-badge">Lakai</div>
           <div class="feat-badge">Fourstar</div>
@@ -210,11 +208,9 @@ html,body{background:#111;display:flex;align-items:flex-start;justify-content:ce
       <div class="feat-info">
         <div class="feat-name">Paul<br>Rodriguez</div>
         <div class="feat-tags">
-          <div class="feat-dot"><svg width=8 height=8 viewBox="0 0 24 24" fill="#000"><circle cx=12 cy=12 r=8/></svg></div>
           <div class="feat-tag">Pro &middot; Street &middot; Los Angeles</div>
         </div>
         <div class="feat-badges">
-          <div class="feat-badge">Street</div>
           <div class="feat-badge">Plan B</div>
           <div class="feat-badge">Nike SB</div>
           <div class="feat-badge">Primitive</div>
@@ -223,7 +219,7 @@ html,body{background:#111;display:flex;align-items:flex-start;justify-content:ce
     </div>
   </div>
 
-  <div class="dots">
+  <div class="dots" style="display:none">
     <div class="dot on" id="dot-0"></div>
     <div class="dot" id="dot-1"></div>
   </div>
@@ -237,7 +233,7 @@ html,body{background:#111;display:flex;align-items:flex-start;justify-content:ce
         <svg width=13 height=13 viewBox="0 0 24 24" fill="#000"><polygon points="5,3 19,12 5,21"/></svg>
         Watch Clips
       </button>
-      <button class="btn-f"><svg width=12 height=12 viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width=2.8 stroke-linecap="round"><line x1=12 y1=4 x2=12 y2=20/><line x1=4 y1=12 x2=20 y2=12/></svg> Follow</button>
+      <button class="btn-f"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke="#fff" stroke-width="2.5" stroke-linecap="round" fill="none"/></svg> Follow</button>
     </div>
 
     <!-- VIDEOS -->
@@ -373,7 +369,7 @@ function setFilter(v) {
   wrap.addEventListener('scroll', function(){
     clearTimeout(t);
     t = setTimeout(function(){
-      var idx = Math.round(wrap.scrollLeft / (326 + 14));
+      var idx = Math.round(wrap.scrollLeft / (350 + 14));
       idx = Math.max(0, Math.min(idx, keys.length-1));
       document.getElementById('dot-0').classList.toggle('on', idx===0);
       document.getElementById('dot-1').classList.toggle('on', idx===1);
