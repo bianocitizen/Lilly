@@ -38,7 +38,7 @@ html,body{background:#111;display:flex;align-items:flex-start;justify-content:ce
 .feat-card{
   flex-shrink:0;
   width:350px;
-  height:430px;
+  height:520px;
   border-radius:20px;
   scroll-snap-align:center;
   position:relative;
@@ -55,13 +55,15 @@ html,body{background:#111;display:flex;align-items:flex-start;justify-content:ce
   border-radius:inherit;
 }
 .feat-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.feat-grad{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.08) 0%,rgba(0,0,0,.04) 25%,rgba(0,0,0,.6) 65%,rgba(0,0,0,.9) 100%)}
+.feat-grad{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.0) 0%,rgba(0,0,0,.0) 35%,rgba(0,0,0,.72) 60%,rgba(0,0,0,.96) 100%)}
 .feat-info{position:absolute;bottom:0;left:0;right:0;padding:16px 18px 18px}
 .feat-name{font-family:"Big Shoulders Display",sans-serif;font-size:42px;font-weight:900;color:#fff;text-transform:uppercase;letter-spacing:.01em;line-height:.92;margin-bottom:10px}
 .feat-tags{display:flex;align-items:center;gap:7px}
 .feat-dot{width:16px;height:16px;border-radius:50%;background:rgba(255,255,255,.88);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .feat-tag{font-size:12px;color:rgba(255,255,255,.75);font-weight:500}
 .feat-badges{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
+.feat-bio{font-size:12px;color:rgba(255,255,255,.65);line-height:1.55;margin-top:11px}
+.feat-bio-more{font-weight:700;color:rgba(255,255,255,.4)}
 .feat-badge{border:1px solid rgba(255,255,255,.32);border-radius:4px;padding:2px 7px;font-size:9px;font-weight:700;color:rgba(255,255,255,.75);letter-spacing:.06em;text-transform:uppercase}
 
 /* DOTS */
@@ -82,7 +84,7 @@ html,body{background:#111;display:flex;align-items:flex-start;justify-content:ce
 
 /* CTA */
 .cta{display:flex;gap:9px;padding:14px 20px 0;margin-bottom:32px;align-items:center}
-.btn-w{flex:1;height:42px;border-radius:999px;background:#fff;border:none;display:flex;align-items:center;justify-content:center;gap:7px;font-size:13.5px;font-weight:700;color:#000;cursor:pointer}
+.btn-w{height:42px;border-radius:999px;background:#fff;border:none;display:flex;align-items:center;justify-content:center;gap:7px;font-size:13.5px;font-weight:700;color:#000;cursor:pointer;padding:0 24px}
 .btn-f{height:42px;padding:0 16px;border-radius:999px;background:rgba(255,255,255,.12);border:none;display:flex;align-items:center;gap:5px;font-size:13.5px;font-weight:600;color:#fff;cursor:pointer}
 
 /* SECTION HEADER */
@@ -200,6 +202,7 @@ html,body{background:#111;display:flex;align-items:flex-start;justify-content:ce
           <div class="feat-badge">Lakai</div>
           <div class="feat-badge">Fourstar</div>
         </div>
+        <div class="feat-bio">One of the most technically gifted and stylistically precise street skaters of his generation. His part in Lakai&#8217;s Fully Flared is widely considered one of the greatest ever filmed. <span class="feat-bio-more">MORE</span></div>
       </div>
     </div>
     <div class="feat-card" data-id="prod">
@@ -215,6 +218,7 @@ html,body{background:#111;display:flex;align-items:flex-start;justify-content:ce
           <div class="feat-badge">Nike SB</div>
           <div class="feat-badge">Primitive</div>
         </div>
+        <div class="feat-bio">One of the most technically consistent street skaters of his generation. P-Rod&#8217;s precision and contest dominance earned him multiple X Games golds and one of Nike SB&#8217;s most iconic signature shoes. <span class="feat-bio-more">MORE</span></div>
       </div>
     </div>
   </div>
