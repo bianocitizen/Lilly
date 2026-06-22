@@ -54,7 +54,10 @@ html,body{background:#1a1a1a;display:flex;align-items:flex-start;justify-content
 .cw-more{position:absolute;top:8px;right:8px;font-size:16px;color:rgba(255,255,255,.4);letter-spacing:1.5px;line-height:1}
 .cw-prog{position:absolute;bottom:0;left:0;right:0;height:3px;background:rgba(255,255,255,.15)}
 .cw-bar{height:100%;background:#fff;border-radius:999px}
-.vc{width:100px;min-width:100px;height:148px;border-radius:12px;background:#1c1c1e;overflow:hidden;position:relative;flex-shrink:0}
+.vc{width:100px;min-width:100px;height:148px;border-radius:12px;background:#1c1c1e;overflow:hidden;position:relative;flex-shrink:0;background-size:cover;background-position:center top}
+.vc::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.88) 0%,rgba(0,0,0,.45) 55%,rgba(0,0,0,.15) 100%);z-index:0}
+.vc .t10n{z-index:2}
+.vc .vc-info{z-index:2}
 .vc-info{position:absolute;bottom:0;left:0;right:0;padding:6px 8px 8px}
 .vc-name{font-size:11px;font-weight:700;color:#fff;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .vc-genre{font-size:10px;color:rgba(255,255,255,.5);margin-top:1px}
@@ -236,21 +239,21 @@ html,body{background:#1a1a1a;display:flex;align-items:flex-start;justify-content
       <div class="sec" style="margin-top:8px">
         <div class="stitle">Top 10 Full-Lengths <span class="stitle-arrow">›</span></div>
         <div class="row">
-          <div class="vc" onclick="window.location.href='klaktv_single.html'" style="position:relative;background:#12122e;cursor:pointer"><div class="t10n">1</div><div class="vc-info"><div class="vc-name">Baker 3</div><div class="vc-genre">Full-Length</div></div></div>
-          <div class="vc" onclick="window.location.href='klaktv_single.html'" style="position:relative;background:#1a0d0d;cursor:pointer"><div class="t10n">2</div><div class="vc-info"><div class="vc-name">Sorry</div><div class="vc-genre">Full-Length</div></div></div>
-          <div class="vc" onclick="window.location.href='klaktv_single.html'" style="position:relative;background:#0d1a0d;cursor:pointer"><div class="t10n">3</div><div class="vc-info"><div class="vc-name">Mouse</div><div class="vc-genre">Full-Length</div></div></div>
-          <div class="vc" onclick="window.location.href='klaktv_single.html'" style="position:relative;background:#1a1a0d;cursor:pointer"><div class="t10n">4</div><div class="vc-info"><div class="vc-name">Menikmati</div><div class="vc-genre">Full-Length</div></div></div>
-          <div class="vc" onclick="window.location.href='klaktv_single.html'" style="position:relative;background:#0d0d1a;cursor:pointer"><div class="t10n">5</div><div class="vc-info"><div class="vc-name">Yeah Right!</div><div class="vc-genre">Full-Length</div></div></div>
+          <div class="vc" onclick="window.location.href='klaktv_single.html'" style="position:relative;background:#12122e;cursor:pointer;background-image:url(https://img.youtube.com/vi/mhoGEeK7t8E/hqdefault.jpg)"><div class="t10n">1</div><div class="vc-info"><div class="vc-name">Baker 3</div><div class="vc-genre">Full-Length</div></div></div>
+          <div class="vc" onclick="window.location.href='klaktv_single.html'" style="position:relative;background:#1a0d0d;cursor:pointer;background-image:url(https://img.youtube.com/vi/8SnVOa8hr7k/hqdefault.jpg)"><div class="t10n">2</div><div class="vc-info"><div class="vc-name">Sorry</div><div class="vc-genre">Full-Length</div></div></div>
+          <div class="vc" onclick="window.location.href='klaktv_single.html'" style="position:relative;background:#0d1a0d;cursor:pointer;background-image:url(https://img.youtube.com/vi/Qp_vOLB-OUE/hqdefault.jpg)"><div class="t10n">3</div><div class="vc-info"><div class="vc-name">Mouse</div><div class="vc-genre">Full-Length</div></div></div>
+          <div class="vc" onclick="window.location.href='klaktv_single.html'" style="position:relative;background:#1a1a0d;cursor:pointer;background-image:url(https://img.youtube.com/vi/5EEYLTD9AXo/hqdefault.jpg)"><div class="t10n">4</div><div class="vc-info"><div class="vc-name">Menikmati</div><div class="vc-genre">Full-Length</div></div></div>
+          <div class="vc" onclick="window.location.href='klaktv_single.html'" style="position:relative;background:#0d0d1a;cursor:pointer;background-image:url(https://img.youtube.com/vi/52-62ywYPsk/hqdefault.jpg)"><div class="t10n">5</div><div class="vc-info"><div class="vc-name">Yeah Right!</div><div class="vc-genre">Full-Length</div></div></div>
         </div>
       </div>
       <div class="sec" style="margin-top:8px">
         <div class="stitle">Top 10 Promos <span class="stitle-arrow">›</span></div>
         <div class="row">
-          <div class="vc" onclick="window.location.href='klaktv_single.html'" style="background:#181020;position:relative;cursor:pointer"><div class="t10n">1</div><div class="vc-info"><div class="vc-name">J'FKN Travaille</div><div class="vc-genre">Promo</div></div></div>
+          <div class="vc" onclick="window.location.href='klaktv_single.html'" style="background:#181020;position:relative;cursor:pointer;background-image:url(https://img.youtube.com/vi/G-FCVJ_g_70/hqdefault.jpg)"><div class="t10n">1</div><div class="vc-info"><div class="vc-name">J'FKN Travaille</div><div class="vc-genre">Promo</div></div></div>
           <div class="vc" onclick="window.location.href='klaktv_single.html'" style="background:#0e1820;position:relative;cursor:pointer"><div class="t10n">2</div><div class="vc-info"><div class="vc-name">Seen Your Year</div><div class="vc-genre">Web Edit</div></div></div>
-          <div class="vc" onclick="window.location.href='klaktv_single.html'" style="background:#1a1010;position:relative;cursor:pointer"><div class="t10n">3</div><div class="vc-info"><div class="vc-name">Deadname</div><div class="vc-genre">Solo Part</div></div></div>
-          <div class="vc" onclick="window.location.href='klaktv_single.html'" style="background:#10180e;position:relative;cursor:pointer"><div class="t10n">4</div><div class="vc-info"><div class="vc-name">Purple</div><div class="vc-genre">Promo</div></div></div>
-          <div class="vc" onclick="window.location.href='klaktv_single.html'" style="background:#1a1520;position:relative;cursor:pointer"><div class="t10n">5</div><div class="vc-info"><div class="vc-name">Static IV</div><div class="vc-genre">Full-Length</div></div></div>
+          <div class="vc" onclick="window.location.href='klaktv_single.html'" style="background:#1a1010;position:relative;cursor:pointer;background-image:url(https://img.youtube.com/vi/aYNfc6qMgpo/hqdefault.jpg)"><div class="t10n">3</div><div class="vc-info"><div class="vc-name">Deadname</div><div class="vc-genre">Solo Part</div></div></div>
+          <div class="vc" onclick="window.location.href='klaktv_single.html'" style="background:#10180e;position:relative;cursor:pointer;background-image:url(https://img.youtube.com/vi/_agQba7Q_tM/hqdefault.jpg)"><div class="t10n">4</div><div class="vc-info"><div class="vc-name">Purple</div><div class="vc-genre">Promo</div></div></div>
+          <div class="vc" onclick="window.location.href='klaktv_single.html'" style="background:#1a1520;position:relative;cursor:pointer;background-image:url(https://img.youtube.com/vi/ZZDU9FWfA-w/hqdefault.jpg)"><div class="t10n">5</div><div class="vc-info"><div class="vc-name">Static IV</div><div class="vc-genre">Full-Length</div></div></div>
         </div>
       </div>
       <div class="sec" style="margin-top:8px">
