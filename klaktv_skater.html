@@ -55,9 +55,9 @@ html,body{background:#111;display:flex;align-items:flex-start;justify-content:ce
   border-radius:inherit;
 }
 .feat-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.feat-grad{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(255,255,255,.0) 0%,rgba(255,255,255,.0) 30%,rgba(255,255,255,.72) 62%,rgba(255,255,255,.97) 100%)}
+.feat-grad{position:absolute;inset:0;backdrop-filter:blur(45px);-webkit-backdrop-filter:blur(45px);-webkit-mask:linear-gradient(to bottom,transparent 0%,transparent 28%,#000 55%,#000 100%);mask:linear-gradient(to bottom,transparent 0%,transparent 28%,#000 55%,#000 100%);background:linear-gradient(to bottom,rgba(255,255,255,.0) 0%,rgba(255,255,255,.0) 30%,rgba(255,255,255,.72) 62%,rgba(255,255,255,.97) 100%)}
 .feat-info{position:absolute;bottom:0;left:0;right:0;padding:16px 18px 18px}
-.feat-name{font-family:"Big Shoulders Display",sans-serif;font-size:42px;font-weight:900;color:#111;text-transform:uppercase;letter-spacing:.01em;line-height:.92;margin-bottom:10px}
+.feat-name{font-family:"Big Shoulders Display",sans-serif;font-size:42px;font-weight:900;color:#FF4F33;text-transform:uppercase;letter-spacing:.01em;line-height:.92;margin-bottom:10px}
 .feat-tags{display:flex;align-items:center;gap:7px}
 .feat-dot{width:16px;height:16px;border-radius:50%;background:rgba(255,255,255,.88);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .feat-tag{font-size:12px;color:rgba(0,0,0,.65);font-weight:400}
@@ -109,20 +109,22 @@ html,body{background:#111;display:flex;align-items:flex-start;justify-content:ce
 .vm{width:26px;flex-shrink:0;display:flex;align-items:flex-start;justify-content:center;color:rgba(255,255,255,.3);font-size:16px;padding-top:3px;cursor:pointer}
 
 /* PARTS CAROUSEL */
-.car{display:flex;overflow-x:auto;gap:14px;padding:0 20px;scroll-snap-type:x mandatory;scrollbar-width:none}
+.car{display:flex;overflow-x:auto;gap:14px;padding:0 20px;scroll-snap-type:x mandatory;scroll-padding-left:20px;scrollbar-width:none}
+.car::after{content:"";flex:0 0 1px}
 .car::-webkit-scrollbar{display:none}.car::-webkit-scrollbar{display:none}
 .pc{flex-shrink:0;width:300px;cursor:pointer;scroll-snap-align:start}
 .pc-th{width:300px;height:169px;border-radius:14px;overflow:hidden;position:relative;margin-bottom:10px;display:flex;align-items:center;justify-content:center}
-.pc-dur{position:absolute;bottom:6px;right:8px;font-size:10px;color:#fff;background:rgba(0,0,0,.65);padding:2px 5px;border-radius:4px;font-weight:600}
+.pc-dur{font-size:14px;color:rgba(255,255,255,.85);font-weight:600;margin-top:5px;text-shadow:0 1px 4px rgba(0,0,0,.6)}
 .pc-dot{position:absolute;bottom:6px;left:8px;font-size:10px;color:rgba(255,255,255,.7);background:rgba(0,0,0,.5);padding:2px 6px;border-radius:4px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
-.pc-title{position:absolute;left:12px;right:12px;bottom:10px;font-size:14px;font-weight:700;color:#fff;line-height:1.25;z-index:2;text-shadow:0 1px 4px rgba(0,0,0,.6)}
+.pc-cap{position:absolute;left:14px;right:14px;bottom:12px;z-index:2}
+.pc-title{font-size:14px;font-weight:700;color:#fff;line-height:1.25;text-shadow:0 1px 4px rgba(0,0,0,.6);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .pc-meta{font-size:11px;color:rgba(255,255,255,.38);margin-top:2px}
 .pc-grad{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,0) 40%,rgba(0,0,0,.85) 100%);z-index:1}
 
 /* ABOUT */
 .ac-wrap{display:flex;overflow-x:auto;gap:12px;padding:0 20px;scrollbar-width:none}.ac-wrap::-webkit-scrollbar{display:none}
 .ac{flex-shrink:0;width:272px;background:rgba(255,255,255,.07);border-radius:14px;padding:15px 16px}
-.ac-lbl{font-size:9.5px;font-weight:700;color:rgba(255,255,255,.32);text-transform:uppercase;letter-spacing:.08em;margin-bottom:7px}
+.ac-lbl{font-size:9.5px;font-weight:400;color:rgba(255,255,255,.32);text-transform:uppercase;letter-spacing:.08em;margin-bottom:7px}
 .ac-ttl{font-size:15px;font-weight:700;color:#fff;margin-bottom:9px;line-height:1.25}
 .ac-txt{font-size:12.5px;color:rgba(255,255,255,.58);line-height:1.6}
 #bio-card{font-size:13.5px;color:rgba(255,255,255,.62);line-height:1.55;padding:18px}
@@ -175,12 +177,9 @@ html,body{background:#111;display:flex;align-items:flex-start;justify-content:ce
 .content-area.fade{opacity:0}
 
 /* VIDEO CONTEXT POPUP */
-.vpop-ovl{position:absolute;inset:0;z-index:200;display:none;background:rgba(0,0,0,.45);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.vpop-ovl{position:absolute;inset:0;z-index:200;display:none;background:transparent}
 .vpop-ovl.open{display:block;animation:fadeIn .18s}
 .vpop{position:absolute;left:20px;right:20px;bottom:80px;background:rgba(30,30,32,.82);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);border-radius:16px;overflow:hidden}
-.vpop-hdr{padding:14px 16px 10px;border-bottom:1px solid rgba(255,255,255,.08)}
-.vpop-title{font-size:13px;font-weight:600;color:#fff;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.vpop-sub{font-size:11px;color:rgba(255,255,255,.38)}
 .vpop-item{display:flex;align-items:center;gap:14px;padding:14px 16px;border-bottom:1px solid rgba(255,255,255,.06);cursor:pointer;font-size:15px;color:#fff}
 .vpop-item:last-child{border-bottom:none}
 .vpop-item svg{flex-shrink:0;opacity:.85}
@@ -300,10 +299,6 @@ html,body{background:#111;display:flex;align-items:flex-start;justify-content:ce
 <!-- VIDEO CONTEXT POPUP -->
 <div class="vpop-ovl" id="vpopOvl" onclick="closeVpop()">
   <div class="vpop" onclick="event.stopPropagation()">
-    <div class="vpop-hdr">
-      <div class="vpop-title" id="vpop-title"></div>
-      <div class="vpop-sub" id="vpop-sub"></div>
-    </div>
     <div class="vpop-item" onclick="closeVpop()">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
       Download
@@ -343,8 +338,7 @@ function renderContent(id) {
     return '<div class="pc">' +
       '<div class="pc-th" style="background:#111">' +
         '<div class="pc-grad"></div>' +
-        '<div class="pc-dur">&#9654; '+p.dur+'</div>' +
-        '<div class="pc-title">'+p.title+' &middot; '+p.meta+'</div>' +
+        '<div class="pc-cap"><div class="pc-title">'+p.title+' &middot; '+p.meta+'</div><div class="pc-dur">&#9654; '+p.dur+'</div></div>' +
       '</div>' +
     '</div>';
   }).join('');
@@ -376,7 +370,7 @@ function renderVideos(list) {
     return '<div class="vr">' +
       '<div class="vth" style="background:#1a1a1a"></div>' +
       '<div class="vb"><div class="vs">'+v.src+'</div><div class="vt">'+v.title+'</div><div class="vd">'+v.desc+'</div></div>' +
-      '<div class="vm" onclick="event.stopPropagation();openVpop(\'' + v.title.replace(/'/g,"\\'\'") + '\',\'' + v.src.replace(/'/g,"\\'\'") + '\')">⋯</div>' +
+      '<div class="vm" onclick="event.stopPropagation();openVpop()">⋯</div>' +
     '</div>';
   }).join('');
 }
@@ -420,9 +414,7 @@ function setFilter(v) {
 
 /* ---- MODAL ---- */
 
-function openVpop(title, src) {
-  document.getElementById('vpop-title').textContent = title;
-  document.getElementById('vpop-sub').textContent = src;
+function openVpop() {
   document.getElementById('vpopOvl').classList.add('open');
 }
 function closeVpop() {
