@@ -57,10 +57,12 @@ html,body{background:#111;display:flex;align-items:flex-start;justify-content:ce
 .feat-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .feat-grad{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.08) 0%,rgba(0,0,0,.04) 25%,rgba(0,0,0,.6) 65%,rgba(0,0,0,.9) 100%)}
 .feat-info{position:absolute;bottom:0;left:0;right:0;padding:16px 18px 18px}
-.feat-name{font-size:26px;font-weight:900;color:#fff;text-transform:uppercase;letter-spacing:.01em;line-height:1.05;margin-bottom:8px}
+.feat-name{font-family:"Big Shoulders Display",sans-serif;font-size:42px;font-weight:900;color:#fff;text-transform:uppercase;letter-spacing:.01em;line-height:.92;margin-bottom:10px}
 .feat-tags{display:flex;align-items:center;gap:7px}
 .feat-dot{width:16px;height:16px;border-radius:50%;background:rgba(255,255,255,.88);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .feat-tag{font-size:12px;color:rgba(255,255,255,.75);font-weight:500}
+.feat-badges{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
+.feat-badge{border:1px solid rgba(255,255,255,.32);border-radius:4px;padding:2px 7px;font-size:9px;font-weight:700;color:rgba(255,255,255,.75);letter-spacing:.06em;text-transform:uppercase}
 
 /* DOTS */
 .dots{display:flex;justify-content:center;gap:5px;padding:10px 0 0}
@@ -119,6 +121,7 @@ html,body{background:#111;display:flex;align-items:flex-start;justify-content:ce
 .ac-lbl{font-size:9.5px;font-weight:700;color:rgba(255,255,255,.32);text-transform:uppercase;letter-spacing:.08em;margin-bottom:7px}
 .ac-ttl{font-size:15px;font-weight:700;color:#fff;margin-bottom:9px;line-height:1.25}
 .ac-txt{font-size:12.5px;color:rgba(255,255,255,.58);line-height:1.6}
+#bio-card{font-size:13.5px;color:rgba(255,255,255,.62);line-height:1.55;padding:18px}
 
 /* COMPANIES */
 .co-list{padding:0 20px}
@@ -193,6 +196,12 @@ html,body{background:#111;display:flex;align-items:flex-start;justify-content:ce
           <div class="feat-dot"><svg width=8 height=8 viewBox="0 0 24 24" fill="#000"><circle cx=12 cy=12 r=8/></svg></div>
           <div class="feat-tag">Pro &middot; Street &middot; Los Angeles</div>
         </div>
+        <div class="feat-badges">
+          <div class="feat-badge">Street</div>
+          <div class="feat-badge">Chocolate</div>
+          <div class="feat-badge">Lakai</div>
+          <div class="feat-badge">Fourstar</div>
+        </div>
       </div>
     </div>
     <div class="feat-card" data-id="prod">
@@ -203,6 +212,12 @@ html,body{background:#111;display:flex;align-items:flex-start;justify-content:ce
         <div class="feat-tags">
           <div class="feat-dot"><svg width=8 height=8 viewBox="0 0 24 24" fill="#000"><circle cx=12 cy=12 r=8/></svg></div>
           <div class="feat-tag">Pro &middot; Street &middot; Los Angeles</div>
+        </div>
+        <div class="feat-badges">
+          <div class="feat-badge">Street</div>
+          <div class="feat-badge">Plan B</div>
+          <div class="feat-badge">Nike SB</div>
+          <div class="feat-badge">Primitive</div>
         </div>
       </div>
     </div>
@@ -215,13 +230,7 @@ html,body{background:#111;display:flex;align-items:flex-start;justify-content:ce
 
   <div class="content-area" id="contentArea">
 
-    <div class="ds">
-      <div class="ds-title" id="ds-title"></div>
-      <div class="ds-sub" id="ds-sub"></div>
-      <div class="ds-desc" id="ds-desc"></div>
-    </div>
-
-    <div class="br" id="br"></div>
+    
 
     <div class="cta">
       <button class="btn-w">
@@ -244,6 +253,10 @@ html,body{background:#111;display:flex;align-items:flex-start;justify-content:ce
     <!-- VIDEO PARTS -->
     <div class="sh"><span>Video Parts</span><span class="sh-r">&rsaquo;</span></div>
     <div class="car" id="parts-car"></div>
+
+    <!-- BIO -->
+    <div class="sh"><span>Bio</span></div>
+    <div class="ac-wrap"><div class="ac" id="bio-card" style="width:auto;flex:1"></div></div>
 
     <!-- ABOUT -->
     <div class="sh"><span>About</span></div>
@@ -293,13 +306,7 @@ function renderContent(id) {
   currentModals = sk.modals;
 
   document.getElementById('top-meta').textContent = sk.meta;
-  document.getElementById('ds-title').textContent = sk.title;
-  document.getElementById('ds-sub').textContent   = sk.sub;
-  document.getElementById('ds-desc').innerHTML    = sk.desc + '<span class="ds-more" onclick="openModal(\'bio\')"> MORE</span>';
-
-  document.getElementById('br').innerHTML = sk.badges.map(function(b){
-    return '<div class="bch">'+b+'</div>';
-  }).join('');
+  document.getElementById('bio-card').innerHTML = sk.desc + ' <span class="ds-more" onclick="openModal(\'bio\')">MORE</span>';
 
   renderVideos(sk.videos);
 
