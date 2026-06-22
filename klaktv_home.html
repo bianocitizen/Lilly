@@ -330,62 +330,131 @@ function glitch(fromEl,cb){
   var vid=fromEl.querySelector('video');
   if(vid)sc.drawImage(vid,0,0,W,H);
   else{sc.fillStyle='#111';sc.fillRect(0,0,W,H);}
-  var DUR=680,switchAt=0.38,start=null,switched=false;
+
+  // pre-extract R/G/B channel canvases once
+  function makeChannel(ch){
+    var cc=document.createElement('canvas');cc.width=W;cc.height=H;
+    var cx=cc.getContext('2d');cx.drawImage(snap,0,0);
+    var id=cx.getImageData(0,0,W,H);var d=id.data;
+    for(var j=0;j<d.length;j+=4){
+      if(ch!==0)d[j]=0; if(ch!==1)d[j+1]=0; if(ch!==2)d[j+2]=0;
+    }
+    cx.putImageData(id,0,0);
+    return cc;
+  }
+  var chR=makeChannel(0),chG=makeChannel(1),chB=makeChannel(2);
+
+  var DUR=820, switchAt=0.38, start=null, switched=false;
+  // persistent noise state for bounce (keeps direction between frames for smoothness)
+  var bounceY=0, bounceVY=0;
+  var chromaAngle=Math.random()*Math.PI*2;
+
   function rnd(a,b){return a+Math.random()*(b-a);}
+  function sign(){return Math.random()<0.5?-1:1;}
+
+  // per-frame jitter seeds so each frame looks different
   function drawGlitch(p){
     var intensity=p<0.5?p*2:(1-p)*2;
+    // spike: random bursts of extra intensity
+    var spike=(Math.random()<0.18)?rnd(0.3,0.7):0;
+    var eff=Math.min(1,intensity+spike*intensity);
+
     ctx.clearRect(0,0,W,H);
+
+    // --- BOUNCE / VERTICAL SHAKE ---
+    // spring-damper: snap image bounces up/down erratically
+    var targetY=eff>0.15?(sign()*rnd(8,55)*eff):0;
+    bounceVY+=(targetY-bounceY)*0.55 + rnd(-18,18)*eff;
+    bounceVY*=0.52;
+    bounceY+=bounceVY;
+    var by=Math.round(bounceY);
+
     // pixelation
-    var px=Math.max(1,Math.floor(1+intensity*22));
+    var px=Math.max(1,Math.floor(1+eff*20));
     var tw=Math.ceil(W/px),th=Math.ceil(H/px);
     var tmp=document.createElement('canvas');tmp.width=tw;tmp.height=th;
     var tc2=tmp.getContext('2d');tc2.drawImage(snap,0,0,tw,th);
-    ctx.imageSmoothingEnabled=false;ctx.drawImage(tmp,0,0,W,H);
-    // horizontal slice displacement
-    var numSlices=Math.floor(6+intensity*90);
+    ctx.imageSmoothingEnabled=false;
+    ctx.drawImage(tmp,0,by,W,H); // bounced base
+
+    // --- HORIZONTAL SLICE DISPLACEMENT ---
+    var numSlices=Math.floor(5+eff*100);
+    // occasionally a "mega-slice" that covers half the screen
+    if(eff>0.3&&Math.random()<0.25){
+      var msy=Math.floor(rnd(0,H*0.6));
+      var msh=Math.floor(rnd(H*0.1,H*0.45));
+      var mdx=sign()*rnd(60,200)*eff;
+      ctx.drawImage(snap,0,msy,W,msh,mdx,msy+by,W,msh);
+      ctx.drawImage(snap,0,msy,W,msh,mdx-W*sign(),msy+by,W,msh);
+    }
     for(var i=0;i<numSlices;i++){
       var sy=Math.floor(rnd(0,H));
-      var sh=Math.floor(rnd(1,2+intensity*14));
-      var dx=rnd(-intensity*130,intensity*130);
-      ctx.drawImage(snap,0,sy,W,sh,dx,sy,W,sh);
-      if(Math.random()<0.5)ctx.drawImage(snap,0,sy,W,sh,dx-W,sy,W,sh);
-      if(Math.random()<0.5)ctx.drawImage(snap,0,sy,W,sh,dx+W,sy,W,sh);
+      var sh=Math.floor(rnd(1,2+eff*16));
+      var dx=rnd(-eff*160,eff*160);
+      // some slices also get a vertical offset for extra chaos
+      var dy=by+(Math.random()<0.3?rnd(-eff*30,eff*30):0);
+      ctx.drawImage(snap,0,sy,W,sh,dx,sy+dy,W,sh);
+      if(Math.random()<0.45)ctx.drawImage(snap,0,sy,W,sh,dx-W,sy+dy,W,sh);
+      if(Math.random()<0.45)ctx.drawImage(snap,0,sy,W,sh,dx+W,sy+dy,W,sh);
     }
-    // RGB channel split
-    var shift=intensity*44;
-    var channels=[
-      {r:1,g:0,b:0,ox:-shift*rnd(0.6,1.4),oy:rnd(-4,4)*intensity},
-      {r:0,g:1,b:0,ox:rnd(-4,4)*intensity,oy:shift*rnd(0.3,0.9)},
-      {r:0,g:0,b:1,ox:shift*rnd(0.5,1.3),oy:rnd(-3,3)*intensity}
-    ];
-    channels.forEach(function(ch){
-      var cc=document.createElement('canvas');cc.width=W;cc.height=H;
-      var cx2=cc.getContext('2d');cx2.drawImage(snap,0,0);
-      var id=cx2.getImageData(0,0,W,H);var d=id.data;
-      for(var j=0;j<d.length;j+=4){
-        if(!ch.r)d[j]=0;if(!ch.g)d[j+1]=0;if(!ch.b)d[j+2]=0;
-      }
-      cx2.putImageData(id,0,0);
-      ctx.save();ctx.globalCompositeOperation='screen';
-      ctx.globalAlpha=0.6*intensity;
-      ctx.drawImage(cc,ch.ox,ch.oy);
-      ctx.restore();
-    });
-    // scanline noise
-    var lineCount=Math.floor(intensity*70);
-    var colors=['#f00','#0f0','#00f','#ff0','#f0f','#0ff','#fff','#0ff'];
-    for(var k=0;k<lineCount;k++){
+
+    // --- CHROMATIC ABERRATION: irregular, huge, angle-based ---
+    chromaAngle+=rnd(0.4,2.2); // spin direction each frame
+    var bigShift=eff*rnd(30,90);
+    var aox=Math.cos(chromaAngle)*bigShift;
+    var aoy=Math.sin(chromaAngle)*bigShift*0.4+by*0.6;
+    // secondary random burst offsets
+    var rx=sign()*rnd(10,70)*eff, ry=sign()*rnd(5,40)*eff;
+    var gx=sign()*rnd(5,50)*eff, gy=sign()*rnd(8,35)*eff;
+    var bx=sign()*rnd(15,80)*eff, bby=sign()*rnd(3,45)*eff;
+
+    // draw each channel multiple times at slightly different offsets for smear
+    ctx.save();ctx.globalCompositeOperation='screen';
+    var alpha=Math.min(0.95, 0.55+eff*0.4);
+
+    ctx.globalAlpha=alpha;
+    ctx.drawImage(chR, aox+rx, aoy+ry);
+    ctx.globalAlpha=alpha*0.5;
+    ctx.drawImage(chR, -aox+rx*0.4, -aoy*0.3);  // ghost copy
+
+    ctx.globalAlpha=alpha*0.8;
+    ctx.drawImage(chG, gx, gy+by*0.7);
+    ctx.globalAlpha=alpha*0.4;
+    ctx.drawImage(chG, -gx*0.5, gy*0.3);
+
+    ctx.globalAlpha=alpha;
+    ctx.drawImage(chB, -aox+bx, aoy*0.5+bby);
+    ctx.globalAlpha=alpha*0.5;
+    ctx.drawImage(chB, aox*0.3, -bby*0.5+by);
+
+    ctx.restore();
+
+    // --- SCANLINES (thicker blocks + thin lines) ---
+    var lc=Math.floor(eff*90);
+    var cols=['#f00','#0f0','#00f','#ff0','#f0f','#0ff','#fff','#f80','#08f'];
+    for(var k=0;k<lc;k++){
       var ly=Math.floor(rnd(0,H));
-      var lh=Math.max(1,Math.floor(rnd(0.5,3)));
-      ctx.fillStyle=colors[Math.floor(Math.random()*colors.length)];
-      ctx.globalAlpha=rnd(0.1,0.75)*intensity;
+      // mix of thin (1-2px) and chunky (4-12px) lines
+      var lh=Math.random()<0.15?Math.floor(rnd(4,14)):Math.floor(rnd(1,3));
+      ctx.fillStyle=cols[Math.floor(Math.random()*cols.length)];
+      ctx.globalAlpha=rnd(0.08,0.9)*eff*(Math.random()<0.2?1.5:1);
       ctx.fillRect(0,ly,W,lh);
     }
     ctx.globalAlpha=1;
-    // darken/fade out at end
-    var fade=Math.max(0,(p-0.55)/0.45);
+
+    // occasional full white/color flash
+    if(eff>0.4&&Math.random()<0.06){
+      ctx.fillStyle=cols[Math.floor(Math.random()*cols.length)];
+      ctx.globalAlpha=rnd(0.05,0.18)*eff;
+      ctx.fillRect(0,0,W,H);
+      ctx.globalAlpha=1;
+    }
+
+    // fade to black at end
+    var fade=Math.max(0,(p-0.58)/0.42);
     if(fade>0){ctx.fillStyle='#000';ctx.globalAlpha=fade;ctx.fillRect(0,0,W,H);ctx.globalAlpha=1;}
   }
+
   function frame(ts){
     if(!start)start=ts;
     var p=Math.min((ts-start)/DUR,1);
@@ -395,6 +464,7 @@ function glitch(fromEl,cb){
   }
   requestAnimationFrame(frame);
 }
+
 
 function go(n){
   var fromEl=document.getElementById('s'+cur);
