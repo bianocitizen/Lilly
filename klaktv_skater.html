@@ -60,11 +60,11 @@ html,body{background:#111;display:flex;align-items:flex-start;justify-content:ce
 .feat-name{font-family:"Big Shoulders Display",sans-serif;font-size:42px;font-weight:900;color:#fff;text-transform:uppercase;letter-spacing:.01em;line-height:.92;margin-bottom:10px}
 .feat-tags{display:flex;align-items:center;gap:7px}
 .feat-dot{width:16px;height:16px;border-radius:50%;background:rgba(255,255,255,.88);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.feat-tag{font-size:12px;color:rgba(255,255,255,.75);font-weight:500}
+.feat-tag{font-size:12px;color:rgba(255,255,255,.75);font-weight:400}
 .feat-badges{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
 .feat-bio{font-size:12px;color:rgba(255,255,255,.65);line-height:1.55;margin-top:11px}
 .feat-bio-more{font-weight:700;color:rgba(255,255,255,.4)}
-.feat-badge{border:1px solid rgba(255,255,255,.32);border-radius:4px;padding:2px 7px;font-size:9px;font-weight:700;color:rgba(255,255,255,.75);letter-spacing:.06em;text-transform:uppercase}
+.feat-badge{background:rgba(255,255,255,.1);backdrop-filter:blur(15px);-webkit-backdrop-filter:blur(15px);border-radius:5px;padding:3px 8px;font-size:9px;font-weight:400;color:rgba(255,255,255,.8);letter-spacing:.06em;text-transform:uppercase}
 
 /* DOTS */
 .dots{display:flex;justify-content:center;gap:5px;padding:10px 0 0}
@@ -94,7 +94,7 @@ html,body{background:#111;display:flex;align-items:flex-start;justify-content:ce
 /* FILTER PILL */
 .fpill{display:flex;background:rgba(255,255,255,.1);border-radius:999px;padding:2px}
 .fp{padding:0 11px;height:24px;border-radius:999px;font-size:11px;font-weight:600;color:rgba(255,255,255,.45);display:flex;align-items:center;cursor:pointer;transition:all .15s}
-.fp.on{background:#fff;color:#000}
+.fp.on{background:rgba(255,255,255,.6);color:#000}
 
 /* VIDEO LIST */
 .vl{padding:0 20px}
@@ -103,19 +103,21 @@ html,body{background:#111;display:flex;align-items:flex-start;justify-content:ce
 .vth{width:112px;height:64px;border-radius:10px;flex-shrink:0;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
 .vth-pl{width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center}
 .vb{flex:1;min-width:0;padding-top:1px}
-.vs{font-size:9.5px;font-weight:700;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px}
+.vs{font-size:9.5px;font-weight:400;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px}
 .vt{font-size:14px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .vd{font-size:12px;color:rgba(255,255,255,.42);line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .vm{width:26px;flex-shrink:0;display:flex;align-items:flex-start;justify-content:center;color:rgba(255,255,255,.3);font-size:16px;padding-top:3px;cursor:pointer}
 
 /* PARTS CAROUSEL */
-.car{display:flex;overflow-x:auto;gap:12px;padding:0 20px;scrollbar-width:none}.car::-webkit-scrollbar{display:none}
-.pc{flex-shrink:0;width:176px;cursor:pointer}
-.pc-th{width:176px;height:98px;border-radius:12px;overflow:hidden;position:relative;margin-bottom:8px;display:flex;align-items:center;justify-content:center}
+.car{display:flex;overflow-x:auto;gap:14px;padding:0 20px;scroll-snap-type:x mandatory;scrollbar-width:none}
+.car::-webkit-scrollbar{display:none}.car::-webkit-scrollbar{display:none}
+.pc{flex-shrink:0;width:300px;cursor:pointer;scroll-snap-align:start}
+.pc-th{width:300px;height:169px;border-radius:14px;overflow:hidden;position:relative;margin-bottom:10px;display:flex;align-items:center;justify-content:center}
 .pc-dur{position:absolute;bottom:6px;right:8px;font-size:10px;color:#fff;background:rgba(0,0,0,.65);padding:2px 5px;border-radius:4px;font-weight:600}
 .pc-dot{position:absolute;bottom:6px;left:8px;font-size:10px;color:rgba(255,255,255,.7);background:rgba(0,0,0,.5);padding:2px 6px;border-radius:4px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
-.pc-title{font-size:13px;font-weight:700;color:#fff;line-height:1.2}
+.pc-title{position:absolute;left:12px;right:12px;bottom:10px;font-size:14px;font-weight:700;color:#fff;line-height:1.25;z-index:2;text-shadow:0 1px 4px rgba(0,0,0,.6)}
 .pc-meta{font-size:11px;color:rgba(255,255,255,.38);margin-top:2px}
+.pc-grad{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,0) 40%,rgba(0,0,0,.85) 100%);z-index:1}
 
 /* ABOUT */
 .ac-wrap{display:flex;overflow-x:auto;gap:12px;padding:0 20px;scrollbar-width:none}.ac-wrap::-webkit-scrollbar{display:none}
@@ -179,7 +181,7 @@ html,body{background:#111;display:flex;align-items:flex-start;justify-content:ce
 <div class="topbar">
   <div class="bk" onclick="window.location.href='klaktv_home.html'"><svg width=14 height=14 viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width=2.5 stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg></div>
   <div class="top-right">
-    <div class="meta-pill" id="top-meta"></div>
+    
     <div class="ib"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a2 2 0 002 2h12a2 2 0 002-2v-7M12 16V3M8 7l4-4 4 4"/></svg></div>
 
   </div>
@@ -202,7 +204,7 @@ html,body{background:#111;display:flex;align-items:flex-start;justify-content:ce
           <div class="feat-badge">Lakai</div>
           <div class="feat-badge">Fourstar</div>
         </div>
-        <div class="feat-bio">One of the most technically gifted and stylistically precise street skaters of his generation. His part in Lakai&#8217;s Fully Flared is widely considered one of the greatest ever filmed. <span class="feat-bio-more">MORE</span></div>
+        <div class="feat-bio">One of the most technically gifted and stylistically precise street skaters of his generation. His part in Lakai&#8217;s Fully Flared is widely considered one of the greatest ever filmed. <span class="feat-bio-more" onclick="openModal('bio')">MORE</span></div>
       </div>
     </div>
     <div class="feat-card" data-id="prod">
@@ -218,7 +220,7 @@ html,body{background:#111;display:flex;align-items:flex-start;justify-content:ce
           <div class="feat-badge">Nike SB</div>
           <div class="feat-badge">Primitive</div>
         </div>
-        <div class="feat-bio">One of the most technically consistent street skaters of his generation. P-Rod&#8217;s precision and contest dominance earned him multiple X Games golds and one of Nike SB&#8217;s most iconic signature shoes. <span class="feat-bio-more">MORE</span></div>
+        <div class="feat-bio">One of the most technically consistent street skaters of his generation. P-Rod&#8217;s precision and contest dominance earned him multiple X Games golds and one of Nike SB&#8217;s most iconic signature shoes. <span class="feat-bio-more" onclick="openModal('bio')">MORE</span></div>
       </div>
     </div>
   </div>
@@ -253,10 +255,6 @@ html,body{background:#111;display:flex;align-items:flex-start;justify-content:ce
     <!-- VIDEO PARTS -->
     <div class="sh"><span>Video Parts</span><span class="sh-r">&rsaquo;</span></div>
     <div class="car" id="parts-car"></div>
-
-    <!-- BIO -->
-    <div class="sh"><span>Bio</span></div>
-    <div class="ac-wrap"><div class="ac" id="bio-card" style="width:auto;flex:1"></div></div>
 
     <!-- ABOUT -->
     <div class="sh"><span>About</span></div>
@@ -305,20 +303,16 @@ function renderContent(id) {
   var sk = SKATERS[id];
   currentModals = sk.modals;
 
-  document.getElementById('top-meta').textContent = sk.meta;
-  document.getElementById('bio-card').innerHTML = sk.desc + ' <span class="ds-more" onclick="openModal(\'bio\')">MORE</span>';
 
   renderVideos(sk.videos);
 
   document.getElementById('parts-car').innerHTML = sk.parts.map(function(p){
     return '<div class="pc">' +
       '<div class="pc-th" style="background:#111">' +
-        '<div style="width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center"><svg width=10 height=10 viewBox="0 0 24 24" fill="#fff"><polygon points="5,3 19,12 5,21"/></svg></div>' +
-        '<div class="pc-dot">'+p.type+'</div>' +
+        '<div class="pc-grad"></div>' +
         '<div class="pc-dur">&#9654; '+p.dur+'</div>' +
+        '<div class="pc-title">'+p.title+' &middot; '+p.meta+'</div>' +
       '</div>' +
-      '<div class="pc-title">'+p.title+'</div>' +
-      '<div class="pc-meta">'+p.meta+'</div>' +
     '</div>';
   }).join('');
 
@@ -347,7 +341,7 @@ function renderVideos(list) {
   var arr = filterMode === 'new' ? list.slice() : list.slice().reverse();
   document.getElementById('vl').innerHTML = arr.map(function(v){
     return '<div class="vr">' +
-      '<div class="vth" style="background:'+v.bg+'"><div class="vth-pl"><svg width=9 height=9 viewBox="0 0 24 24" fill="#fff"><polygon points="5,3 19,12 5,21"/></svg></div></div>' +
+      '<div class="vth" style="background:#1a1a1a"></div>' +
       '<div class="vb"><div class="vs">'+v.src+'</div><div class="vt">'+v.title+'</div><div class="vd">'+v.desc+'</div></div>' +
       '<div class="vm">⋯</div>' +
     '</div>';
