@@ -54,8 +54,8 @@ html,body{background:#111;display:flex;align-items:flex-start;justify-content:ce
   pointer-events:none;
   border-radius:20px;
 }
-.feat-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.feat-grad{position:absolute;inset:0;backdrop-filter:blur(45px);-webkit-backdrop-filter:blur(45px);-webkit-mask:linear-gradient(to bottom,transparent 0%,transparent 50%,#000 72%,#000 100%);mask:linear-gradient(to bottom,transparent 0%,transparent 50%,#000 72%,#000 100%);background:linear-gradient(to bottom,rgba(255,255,255,.0) 0%,rgba(255,255,255,.0) 52%,rgba(255,255,255,.08) 72%,rgba(255,255,255,.15) 100%)}
+.feat-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:20px}
+.feat-grad{position:absolute;inset:0;border-radius:20px;backdrop-filter:blur(25px);-webkit-backdrop-filter:blur(25px);-webkit-mask:linear-gradient(to bottom,transparent 0%,transparent 50%,#000 72%,#000 100%);mask:linear-gradient(to bottom,transparent 0%,transparent 50%,#000 72%,#000 100%);background:linear-gradient(to bottom,rgba(255,255,255,.0) 0%,rgba(255,255,255,.0) 52%,rgba(255,255,255,.05) 72%,rgba(255,255,255,.1) 100%)}
 .feat-info{position:absolute;bottom:0;left:0;right:0;padding:16px 18px 18px}
 .feat-name{font-family:"Big Shoulders Display",sans-serif;font-size:42px;font-weight:900;color:#FF4F33;text-transform:uppercase;letter-spacing:.01em;line-height:.92;margin-bottom:10px}
 .feat-tags{display:flex;align-items:center;gap:7px}
@@ -179,7 +179,7 @@ html,body{background:#111;display:flex;align-items:flex-start;justify-content:ce
 /* VIDEO CONTEXT POPUP */
 .vpop-ovl{position:absolute;inset:0;z-index:200;display:none;background:transparent}
 .vpop-ovl.open{display:block;animation:fadeIn .18s}
-.vpop{position:absolute;left:20px;right:20px;bottom:80px;background:rgba(30,30,32,.82);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);border-radius:16px;overflow:hidden}
+.vpop{position:absolute;right:20px;width:240px;background:rgba(30,30,32,.92);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);border-radius:16px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.5)}
 .vpop-item{display:flex;align-items:center;gap:14px;padding:14px 16px;border-bottom:1px solid rgba(255,255,255,.06);cursor:pointer;font-size:15px;color:#fff}
 .vpop-item:last-child{border-bottom:none}
 .vpop-item svg{flex-shrink:0;opacity:.85}
@@ -372,7 +372,7 @@ function renderVideos(list) {
     return '<div class="vr">' +
       '<div class="vth" style="background:#1a1a1a"></div>' +
       '<div class="vb"><div class="vs">'+v.src+'</div><div class="vt">'+v.title+'</div><div class="vd">'+v.desc+'</div></div>' +
-      '<div class="vm" onclick="event.stopPropagation();openVpop()">⋯</div>' +
+      '<div class="vm" onclick="event.stopPropagation();openVpop(event)">⋯</div>' +
     '</div>';
   }).join('');
 }
@@ -416,8 +416,19 @@ function setFilter(v) {
 
 /* ---- MODAL ---- */
 
-function openVpop() {
-  document.getElementById('vpopOvl').classList.add('open');
+function openVpop(ev) {
+  var ovl = document.getElementById('vpopOvl');
+  var pop = ovl.querySelector('.vpop');
+  var phone = document.querySelector('.phone');
+  var pr = phone.getBoundingClientRect();
+  var ir = ev.currentTarget.getBoundingClientRect();
+  // vertical: align top of popup just below the icon, clamp inside phone
+  var top = ir.top - pr.top + ir.height + 6;
+  ovl.classList.add('open');
+  var ph = pop.offsetHeight;
+  if (top + ph > pr.height - 12) top = ir.top - pr.top - ph - 6;
+  if (top < 12) top = 12;
+  pop.style.top = top + 'px';
 }
 function closeVpop() {
   document.getElementById('vpopOvl').classList.remove('open');
