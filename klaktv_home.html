@@ -14,14 +14,16 @@ html,body{background:#1a1a1a;display:flex;align-items:flex-start;justify-content
 .hfrost{position:absolute;bottom:0;left:0;right:0;height:280px;backdrop-filter:blur(10px) saturate(120%);-webkit-backdrop-filter:blur(10px) saturate(120%);background:linear-gradient(to bottom,transparent 0%,rgba(0,0,0,.42) 38%,rgba(0,0,0,.88) 100%);-webkit-mask-image:linear-gradient(to bottom,transparent 0%,black 30%);mask-image:linear-gradient(to bottom,transparent 0%,black 30%);z-index:2;pointer-events:none}
 .hcontent{position:absolute;bottom:0;left:0;right:0;z-index:3;display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 20px 18px}
 .htags{display:flex;flex-wrap:wrap;justify-content:center;gap:5px;margin-bottom:10px}
-.htag{background:rgba(0,0,0,.6);border-radius:5px;padding:3px 8px;font-size:9px;font-weight:400;color:rgba(255,255,255,.85);letter-spacing:.06em;text-transform:uppercase}
+.htag{display:inline-flex;align-items:center;gap:4px;background:transparent;border:1px solid rgba(255,255,255,.6);border-radius:5px;padding:2px 7px;font-size:9px;font-weight:500;color:rgba(255,255,255,.85);letter-spacing:.06em;text-transform:uppercase}
+.htag.co{border:none;padding:2px 0;color:#fff;font-weight:600}
+.htag.dur svg{width:10px;height:10px;fill:rgba(255,255,255,.85)}
+.hdir{font-size:11px;color:rgba(255,255,255,.7);margin-bottom:14px;letter-spacing:.02em}
 .htitle{font-family:"Big Shoulders Display",sans-serif;font-size:42px;font-weight:900;color:#FF4F33;text-transform:uppercase;letter-spacing:.01em;line-height:.92;margin-bottom:14px}
 .hcolor{position:absolute;bottom:0;left:0;right:0;height:320px;z-index:1;pointer-events:none;transition:background .5s}
-.hcast{font-size:11px;color:rgba(255,255,255,.55);line-height:1.5;max-width:330px;margin-bottom:8px;position:relative;height:33px;overflow:hidden}
+.hcast{font-size:11px;color:rgba(255,255,255,.55);line-height:1.5;max-width:330px;margin-bottom:8px}
 .hyear{display:flex;flex-wrap:wrap;justify-content:center;gap:5px;margin-bottom:14px}
-.hcast .names{display:block}
-.hcast.exp{height:auto;overflow:visible}
-.hmore{position:absolute;bottom:0;right:0;background:linear-gradient(to right,transparent,rgba(15,15,15,.96) 28%);padding-left:22px;font-weight:700;color:rgba(255,255,255,.8);cursor:pointer;font-size:11px;line-height:1.5}
+.hcast .names{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.hcast.exp .names{-webkit-line-clamp:unset}
 .hbtns{display:flex;align-items:center;gap:10px;margin-bottom:12px}
 .hwatch{border-radius:999px;height:42px;padding:0 24px;display:flex;align-items:center;justify-content:center;gap:7px;cursor:pointer;border:none;font-size:13.5px;font-weight:700}
 .hwatch.watch{background:#fff;color:#000}
@@ -198,8 +200,8 @@ html,body{background:#1a1a1a;display:flex;align-items:flex-start;justify-content
       <div class="touch-prev" id="tprev"></div>
       <div class="touch-next" id="tnext"></div>
       <div class="hcontent">
-        <div class="htags" id="hb"></div>
         <div class="htitle" id="ht">Foundation<br>Today Tomorrow Forever</div>
+        <div class="hdir" id="hdir"></div>
         <div class="hbtns">
           <div class="hwatch watch" id="watchBtn" onclick="openPlayer()">
             <svg id="watchIcon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
@@ -306,14 +308,14 @@ function go(n){
   cur=((n%N)+N)%N;
   document.getElementById('s'+cur).classList.add('on');
   const s=SL[cur];
-  document.getElementById('hb').innerHTML='<span class="htag">'+s.meta.split('·')[0].trim()+'</span>';
+  document.getElementById('hdir').textContent=s.meta.split('·')[0].trim();
   document.getElementById('ht').innerHTML=s.title;
   // color gradient overlay (Apple TV style)
   document.getElementById('hcolor').style.background='linear-gradient(to top,'+s.color+' 0%,transparent 100%)';
   // cast
-  (function(c){if(s.cast){c.innerHTML='<span class=\"names\">'+s.cast+'</span><span class=\"hmore\" onclick=\"this.closest(\'.hcast\').classList.add(\'exp\');this.style.display=\'none\'\">... MORE</span>';c.classList.remove('exp');c.style.display='block';}else{c.style.display='none';c.innerHTML='';}})(document.getElementById('hcast'));
+  (function(c){if(s.cast){c.innerHTML='<span class=\"names\">'+s.cast+'</span>';c.style.display='block';}else{c.style.display='none';c.innerHTML='';}})(document.getElementById('hcast'));
   // year + duration tags
-  (function(y){if(s.tags&&s.tags.length){y.innerHTML=s.tags.map(function(t){return '<span class="htag">'+t+'</span>';}).join('');y.style.display='flex';}else{y.style.display='none';y.innerHTML='';};})(document.getElementById('hyear'));
+  (function(y){if(s.tags&&s.tags.length){y.innerHTML=s.tags.map(function(t,i){var cls='htag';if(i===0)cls+=' co';else if(/min/i.test(t))return '<span class="htag dur"><svg viewBox=\"0 -960 960 960\"><path d=\"M120-216v-528q0-30 21-51t51-21h456q30 0 51 21t21 51v210l120-120h36v288H840l-120-120v210q0 30-21 51t-51 21H192q-30 0-51-21t-21-51Z\"/></svg>'+t+'</span>';return '<span class="'+cls+'">'+t+'</span>';}).join('');y.style.display='flex';}else{y.style.display='none';y.innerHTML='';};})(document.getElementById('hyear'));
   // botão Watch / Resume
   updateWatchBtn();
   for(let i=0;i<N;i++){document.getElementById('d'+i).style.width=i===cur?'26px':'5px';document.getElementById('di'+i).style.width='0%';}
@@ -410,11 +412,11 @@ function openFromCW(){
   cur=watchedSlide;
   document.getElementById('s'+cur).classList.add('on');
   const s=SL[cur];
-  document.getElementById('hb').innerHTML='<span class="htag">'+s.meta.split('·')[0].trim()+'</span>';
+  document.getElementById('hdir').textContent=s.meta.split('·')[0].trim();
   document.getElementById('ht').innerHTML=s.title;
   document.getElementById('hcolor').style.background='linear-gradient(to top,'+s.color+' 0%,transparent 100%)';
-  (function(c){if(s.cast){c.innerHTML='<span class=\"names\">'+s.cast+'</span><span class=\"hmore\" onclick=\"this.closest(\'.hcast\').classList.add(\'exp\');this.style.display=\'none\'\">... MORE</span>';c.classList.remove('exp');c.style.display='block';}else{c.style.display='none';c.innerHTML='';}})(document.getElementById('hcast'));
-  (function(y){if(s.tags&&s.tags.length){y.innerHTML=s.tags.map(function(t){return '<span class="htag">'+t+'</span>';}).join('');y.style.display='flex';}else{y.style.display='none';y.innerHTML='';};})(document.getElementById('hyear'));
+  (function(c){if(s.cast){c.innerHTML='<span class=\"names\">'+s.cast+'</span>';c.style.display='block';}else{c.style.display='none';c.innerHTML='';}})(document.getElementById('hcast'));
+  (function(y){if(s.tags&&s.tags.length){y.innerHTML=s.tags.map(function(t,i){var cls='htag';if(i===0)cls+=' co';else if(/min/i.test(t))return '<span class="htag dur"><svg viewBox=\"0 -960 960 960\"><path d=\"M120-216v-528q0-30 21-51t51-21h456q30 0 51 21t21 51v210l120-120h36v288H840l-120-120v210q0 30-21 51t-51 21H192q-30 0-51-21t-21-51Z\"/></svg>'+t+'</span>';return '<span class="'+cls+'">'+t+'</span>';}).join('');y.style.display='flex';}else{y.style.display='none';y.innerHTML='';};})(document.getElementById('hyear'));
   for(let i=0;i<N;i++){document.getElementById('d'+i).style.width=i===cur?'26px':'5px';document.getElementById('di'+i).style.width='0%';}
   // Abrir player
   openPlayer();
