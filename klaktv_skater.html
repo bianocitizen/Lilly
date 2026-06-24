@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Klak TV — People</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#1a1a1a;display:flex;align-items:flex-start;justify-content:center;min-height:100vh;padding:24px 0}
+.phone{width:390px;height:844px;background:#000;color:#fff;font-family:-apple-system,BlinkMacSystemFont,sans-serif;overflow:hidden;position:relative;display:flex;flex-direction:column;border-radius:44px;box-shadow:0 0 0 10px #222,0 0 0 11px #333,0 30px 80px rgba(0,0,0,.8)}
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:52px 18px 12px;flex-shrink:0}
+.hdr-back{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;cursor:pointer;border:none}
+.hdr-back svg{width:18px;height:18px;fill:#fff}
+.hdr-title{font-family:"Big Shoulders Display",sans-serif;font-size:22px;font-weight:900;color:#fff;letter-spacing:.01em;text-transform:uppercase}
+.hdr-search{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;cursor:pointer;border:none}
+.hdr-search svg{width:18px;height:18px;fill:#fff}
+.seg{display:flex;border-bottom:1px solid rgba(255,255,255,.12);flex-shrink:0;padding:0 18px}
+.seg-item{flex:1;text-align:center;padding:10px 0;font-size:13px;font-weight:600;color:rgba(255,255,255,.4);cursor:pointer;position:relative;letter-spacing:.02em}
+.seg-item.on{color:#fff}
+.seg-item.on::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:2px;background:#FF4F33;border-radius:2px 2px 0 0}
+.srch{padding:12px 14px 6px;flex-shrink:0}
+.srch-inner{background:#1a1a1a;border-radius:12px;display:flex;align-items:center;gap:8px;padding:9px 12px}
+.srch-inner svg{width:14px;height:14px;fill:rgba(255,255,255,.4);flex-shrink:0}
+.srch-inner input{background:none;border:none;outline:none;color:#fff;font-size:14px;flex:1;caret-color:#FF4F33}
+.srch-inner input::placeholder{color:rgba(255,255,255,.35)}
+.cnt{padding:5px 18px 3px;font-size:11px;color:rgba(255,255,255,.35);letter-spacing:.04em;text-transform:uppercase;flex-shrink:0}
+.list{flex:1;overflow-y:auto;overflow-x:hidden;scrollbar-width:none}
+.list::-webkit-scrollbar{display:none}
+.item{display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid rgba(255,255,255,.06)}
+.item:last-child{border-bottom:none}
+.av{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;flex-shrink:0;color:#fff;letter-spacing:-.01em}
+.nblock{flex:1;min-width:0}
+.nname{font-size:14px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nsub{font-size:12px;color:rgba(255,255,255,.4);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.actions{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.btn-follow{height:30px;padding:0 13px;border-radius:8px;border:1.5px solid rgba(255,255,255,.45);background:transparent;color:rgba(255,255,255,.9);font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .15s}
+.btn-follow.on{background:#FF4F33;border-color:#FF4F33;color:#fff}
+.btn-share{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;cursor:pointer;border:none}
+.btn-share svg{width:15px;height:15px;fill:rgba(255,255,255,.7)}
+</style>
+</head>
+<body>
+<div class="phone">
+  <div class="hdr">
+    <button class="hdr-back" onclick="history.back()">
+      <svg viewBox="0 -960 960 960"><path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z"/></svg>
+    </button>
+    <span class="hdr-title">People</span>
+    <button class="hdr-search">
+      <svg viewBox="0 -960 960 960"><path d="M765-144 526-383q-30 22-65.79 34.5-35.79 12.5-76.18 12.5Q284-336 214-406t-70-170q0-100 70-170t170-70q100 0 170 70t70 170.03q0 40.39-12.5 76.18Q599-464 577-434l239 239-51 51ZM384-408q70 0 119-49t49-119q0-70-49-119t-119-49q-70 0-119 49t-49 119q0 70 49 119t119 49Z"/></svg>
+    </button>
+  </div>
+
+  <div class="seg">
+    <div class="seg-item on" id="tab-skaters" onclick="switchTab('skaters')">Skaters</div>
+    <div class="seg-item" id="tab-filmmakers" onclick="switchTab('filmmakers')">Filmmakers</div>
+  </div>
+
+  <div class="srch">
+    <div class="srch-inner">
+      <svg viewBox="0 -960 960 960"><path d="M765-144 526-383q-30 22-65.79 34.5-35.79 12.5-76.18 12.5Q284-336 214-406t-70-170q0-100 70-170t170-70q100 0 170 70t70 170.03q0 40.39-12.5 76.18Q599-464 577-434l239 239-51 51ZM384-408q70 0 119-49t49-119q0-70-49-119t-119-49q-70 0-119 49t-49 119q0 70 49 119t119 49Z"/></svg>
+      <input type="text" id="searchInput" placeholder="Search" oninput="filterList(this.value)">
+    </div>
+  </div>
+
+  <div class="cnt" id="cnt"></div>
+  <div class="list" id="list"></div>
+</div>
+
+<script>
+const PAL=['#FF4F33','#3A6FD8','#2AAF74','#E07C1A','#8B44D4','#1AABCC','#D43A6A','#5A8F3C','#B04A2A','#4A6BAE'];
+function hue(s){let h=0;for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))>>>0;return PAL[h%PAL.length];}
+function ini(n){const p=n.replace(/["()’]/g,'').trim().split(/\s+/);return(p.length>=2?p[0][0]+p[p.length-1][0]:p[0].slice(0,2)).toUpperCase();}
+
+const SKATERS=[
+  {n:'Aaron Herrington',t:'Fucking Awesome'},{n:'Aaron "Jaws" Homoki',t:'Birdhouse'},
+  {n:'Aidan Campbell',t:'Foundation'},{n:'Alan Bell',t:'Late Nite Stars'},
+  {n:'Alex Midler',t:'Palace'},{n:'Alex Olson',t:'Bianca Chandon'},
+  {n:'Alexis Sablone',t:'There'},{n:'Andrew Reynolds',t:'Baker'},
+  {n:'Anthony Van Engelen',t:'Fucking Awesome'},{n:'Arto Saari',t:'Flip'},
+  {n:'Austin Heilman',t:'Foundation'},{n:'Austyn Gillette',t:'Former'},
+  {n:'Ben Kadow',t:'Polar'},{n:'Blake Carpenter',t:'Deathwish'},
+  {n:'Brandon Biebel',t:'Girl'},{n:'Brandon Turner',t:'Emerica'},
+  {n:'Brian Anderson',t:'Antihero'},{n:'Bryan Herman',t:'Baker'},
+  {n:'Carlos Ribeiro',t:'Girl'},{n:'Chad Muska',t:"Shorty's"},
+  {n:'Chris Athans',t:'Spitfire'},{n:'Chris Cole',t:'Zero'},
+  {n:'Chris Joslin',t:'Plan B'},{n:'Cody Cepeda',t:'Theories'},
+  {n:'Cody Lockwood',t:'Deathwish'},{n:'Curren Caples',t:'Volcom'},
+  {n:'Daiki Hoshino',t:'Antihero'},{n:'Dakota Servold',t:'Expedition One'},
+  {n:'Dan Drehobl',t:'Deathwish'},{n:'Dane Vaughn',t:'Plan B'},
+  {n:'Danny Renaud',t:'Emerica'},{n:'David Gravette',t:'Antihero'},
+  {n:'Diego Todd',t:'Antihero'},{n:'Dylan Rieder',t:'Gravis'},
+  {n:'Ed Templeton',t:'Toy Machine'},{n:'Elissa Steamer',t:'Baker'},
+  {n:'Eric Koston',t:'Girl'},{n:'Erick Winkowski',t:'Antihero'},
+  {n:'Erik Ellington',t:'Deathwish'},{n:'Evan Smith',t:'Element'},
+  {n:'Felipe Gustavo',t:'Girl'},{n:'Frank Gerwer',t:'Antihero'},
+  {n:'Franky Villani',t:'Real'},{n:'Fred Gall',t:'Ipath'},
+  {n:'Geoff Rowley',t:'Flip'},{n:'Giovanni Vianna',t:'Primitive'},
+  {n:'Grant Taylor',t:'Antihero'},{n:'Guy Mariano',t:'Girl'},
+  {n:'Heath Kirchart',t:'Emerica'},{n:'Ishod Wair',t:'Real'},
+  {n:'Jack Fardell',t:'Flip'},{n:'Jake Hayes',t:'Deathwish'},
+  {n:'Jake Lemonds',t:'Late Nite Stars'},{n:'Jamie Foy',t:'Deathwish'},
+  {n:'Jason Dill',t:'Fucking Awesome'},{n:'Jason Lee',t:'Blind'},
+  {n:'Jeff Carlyle',t:'Antihero'},{n:'Jeron Wilson',t:'Emerica'},
+  {n:'Jesse Lindloff',t:'Foundation'},{n:'Jessie Darnall',t:'Foundation'},
+  {n:'Jesus Fernandez',t:'Heroin'},{n:'Jordan Maxham',t:'Krooked'},
+  {n:'Justin Eldridge',t:'Emerica'},{n:'Karsten Kleppan',t:'Emerica'},
+  {n:'Kevin "Spanky" Long',t:'Emerica'},{n:'Kevin Bradley',t:'Illegal Civ'},
+  {n:'Leo Baker',t:'Wknd'},{n:'Louie Lopez',t:'Chocolate'},
+  {n:'Lucas Puig',t:'Magenta'},{n:'Luan Oliveira',t:'Girl'},
+  {n:'Marc Johnson',t:'Lakai'},{n:'Mark Gonzales',t:'Krooked'},
+  {n:'Mark Suciu',t:'Habitat'},{n:'Mason Silva',t:'Real'},
+  {n:'Matt Bennett',t:'Deathwish'},{n:'Matt Berger',t:'Zoo York'},
+  {n:'Max Jang',t:'Polar'},{n:'Miles Silvas',t:'Real'},
+  {n:'Nassim Guammaz',t:'The Killing Floor'},{n:'Neen Williams',t:'Chocolate'},
+  {n:'Nic Valero',t:'Late Nite Stars'},{n:'Nick Michel',t:'Antihero'},
+  {n:'Nico Marti',t:'Magenta'},{n:'Nyjah Huston',t:'Element'},
+  {n:'Omar Hassan',t:'Birdhouse'},{n:'Patrick Woodling',t:'Welcome'},
+  {n:'Paul Rodriguez',t:'Plan B'},{n:'Pedro Barros',t:'Santa Cruz'},
+  {n:'Pedro Delfino',t:'Antihero'},{n:'Pete Eldridge',t:'Theories'},
+  {n:'Quim Cardona',t:'Chocolate'},{n:'Riley Hawk',t:'Lakai'},
+  {n:'Rob Bootes',t:'Antihero'},{n:'Rodrigo TX',t:'Fallen'},
+  {n:'Ronnie Creager',t:'Girl'},{n:'Ronson Lambert',t:'Krooked'},
+  {n:'Rowan Zorilla',t:'Primitive'},{n:'Ruby Lilley',t:'Foundation'},
+  {n:'Ryan Decenzo',t:'Plan B'},{n:'Ryan Sheckler',t:'Plan B'},
+  {n:"Sebo Walker",t:'Heroin'},{n:'Sewa Kroetkov',t:'Independent'},
+  {n:"Shane O'Neill",t:'Swiss'},{n:'Steve Caballero',t:'Powell-Peralta'},
+  {n:'Stevie Williams',t:'DGK'},{n:'Tanner Lawler',t:'Foundation'},
+  {n:'Theotis Beasley',t:'Baker'},{n:'Tiago Lemos',t:'Primitive'},
+  {n:"Tim O'Connor",t:'Element'},{n:'Tom Penny',t:'Flip'},
+  {n:'Tommy Sandoval',t:'Zero'},{n:'Tony Hawk',t:'Birdhouse'},
+  {n:'Trace Hicks',t:'Hockey'},{n:'Tristan Funkhouser',t:'Deathwish'},
+  {n:'Trung Nguyen',t:'Late Nite Stars'},{n:'Tyshawn Jones',t:'Fucking Awesome'},
+  {n:'Val Verd',t:'Magenta'},{n:'Victor Campillo',t:'Magenta'},
+  {n:'Yuto Namura',t:'Almost'},{n:'Zak Anders',t:'Late Nite Stars'},
+  {n:'Zered Bassett',t:'Bronze 56K'},{n:'Zion Wright',t:'Real'}
+];
+
+const FILMMAKERS=[
+  {n:'Aaron Meza',t:'Director'},{n:'Benny Maglinao',t:'The Berrics'},
+  {n:'Bill Strobeck',t:'Supreme'},{n:'Brendan Bill',t:'Director'},
+  {n:'Chase Walker',t:'Late Nite Stars'},{n:'Chris Ray',t:'Antihero'},
+  {n:'Coan "Buddy" Nichols',t:'Director'},{n:'Cody Thompson',t:'Director'},
+  {n:'Colin Kennedy',t:'Director'},{n:'Damon Way',t:'DC Shoes'},
+  {n:'Dave Chami',t:'Director'},{n:'Daniel Harold Sturt',t:'Director'},
+  {n:'Don Luong',t:'Foundation'},{n:'Fred Mortagne',t:'Magenta'},
+  {n:'Gabe Morford',t:'Director'},{n:'Giovanni Reda',t:'The Berrics'},
+  {n:'Greg Hunt',t:'Director'},{n:'Jamie Mosberg',t:'Director'},
+  {n:'Jason Hernandez',t:'Director'},{n:'Kevin Barnett',t:'Director'},
+  {n:'Mike Manzoori',t:'Director'},{n:'Otto Ray',t:'Thrasher'},
+  {n:'Pontus Alv',t:'Polar'},{n:'Rick Kosick',t:'Director'},
+  {n:'Rob Brink',t:'Director'},{n:'Scott Pommier',t:'Director'},
+  {n:'Spike Jonze',t:'Director'},{n:'Stacy Peralta',t:'Director'},
+  {n:'Tanner Rowe',t:'Director'},{n:'Thomas Campbell',t:'Director'},
+  {n:'Ty Evans',t:'Director'}
+];
+
+let cur='skaters', followed=new Set(), query='';
+
+function switchTab(tab){
+  cur=tab; query='';
+  document.getElementById('searchInput').value='';
+  document.getElementById('tab-skaters').classList.toggle('on',tab==='skaters');
+  document.getElementById('tab-filmmakers').classList.toggle('on',tab==='filmmakers');
+  render();
+}
+
+function filterList(q){query=q.toLowerCase();render();}
+
+function toggleFollow(id){
+  if(followed.has(id))followed.delete(id);else followed.add(id);
+  const btn=document.getElementById('f'+id);
+  if(btn){btn.classList.toggle('on',followed.has(id));btn.textContent=followed.has(id)?'Following':'+ Follow';}
+}
+
+function render(){
+  const data=(cur==='skaters'?SKATERS:FILMMAKERS)
+    .filter(p=>!query||p.n.toLowerCase().includes(query)||p.t.toLowerCase().includes(query))
+    .sort((a,b)=>a.n.localeCompare(b.n));
+  document.getElementById('cnt').textContent=data.length+' '+(cur==='skaters'?'Skaters':'Filmmakers');
+  document.getElementById('list').innerHTML=data.map(function(p,i){
+    const id=cur[0]+i, fol=followed.has(id), col=hue(p.n), av=ini(p.n);
+    return '<div class="item">'+
+      '<div class="av" style="background:'+col+'">'+av+'</div>'+
+      '<div class="nblock"><div class="nname">'+p.n+'</div><div class="nsub">'+p.t+'</div></div>'+
+      '<div class="actions">'+
+        '<button class="btn-follow'+(fol?' on':'')+'" id="f'+id+'" onclick="toggleFollow(\''+id+'\')">'+
+          (fol?'Following':'+ Follow')+
+        '</button>'+
+        '<button class="btn-share" onclick="navigator.share&&navigator.share({title:\''+p.n+'\'})">'+
+          '<svg viewBox="0 -960 960 960"><path d="M720-80q-50 0-85-35t-35-85q0-7 1-14.5t3-13.5L322-392q-17 15-38 23.5T240-360q-50 0-85-35t-35-85q0-50 35-85t85-35q23 0 44 8.5t38 23.5l282-164q-2-6-3-13.5t-1-14.5q0-50 35-85t85-35q50 0 85 35t35 85q0 50-35 85t-85 35q-23 0-44-8.5T638-672L356-508q2 6 3 13.5t1 14.5q0 7-1 14.5T356-452l282 164q17-15 38-23.5t44-8.5q50 0 85 35t35 85q0 50-35 85T720-80Z"/></svg>'+
+        '</button>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+}
+
+render();
+</script>
+</div>
+</body>
+</html>
